@@ -83,11 +83,18 @@ The BCV's own site cannot be read from a browser: its TLS chain is incomplete an
 
 ## Getting started
 
+Requires Node 20+ and [pnpm](https://pnpm.io) 10+. The version is pinned in `packageManager`, so Corepack picks it up on its own:
+
+```bash
+corepack enable
+pnpm install         # no dependencies to fetch; this just verifies the toolchain
+```
+
 ES modules are served over HTTP, so opening the file directly will not work. Any static server does:
 
 ```bash
-npm run dev          # npx serve
-# or
+pnpm dev             # pnpm dlx serve .
+# or, with nothing installed at all
 python -m http.server 8000
 ```
 
@@ -96,8 +103,8 @@ Then open the address it prints.
 ### Tests
 
 ```bash
-npm test             # node --test, no dependencies
-npm run test:watch
+pnpm test            # node --test, no dependencies
+pnpm test:watch
 ```
 
 ### Deploying
