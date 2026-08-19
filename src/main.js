@@ -17,6 +17,7 @@ import { formatRate, parseAmount } from './format.js';
 import { cacheRates, fetchRates, loadCachedRates } from './rates.js';
 import { readJson, remove, writeJson } from './storage.js';
 import { strings } from './strings.js';
+import { initTheme, toggleTheme } from './theme.js';
 import {
   buildGauge,
   elements,
@@ -30,6 +31,7 @@ import {
   setRateValue,
   setReferenceMode,
   setRefreshBusy,
+  setThemeToggle,
   showToast,
 } from './ui.js';
 
@@ -297,6 +299,7 @@ function bindEvents() {
 
   elements.refreshButton.addEventListener('click', () => refreshRates({ manual: true }));
   elements.clearButton.addEventListener('click', clearEverything);
+  elements.themeToggle.addEventListener('click', () => setThemeToggle(toggleTheme()));
 
   elements.persistToggle.addEventListener('change', (event) => {
     if (event.target.checked) {
@@ -338,6 +341,7 @@ function bindEvents() {
 /* ------------------------------------------------------------------ Boot */
 
 function start() {
+  initTheme(setThemeToggle);
   buildGauge();
   restorePreferences();
 
