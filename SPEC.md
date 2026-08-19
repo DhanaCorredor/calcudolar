@@ -289,7 +289,7 @@ Writing this specification after the fact exposed behaviour that existed by acci
 
 **GAP-4 · No defence against typos.** Entering `70` instead of `700` yields a thousand-percent overcharge and a catastrophic verdict, with nothing suggesting the input may be wrong.
 
-**GAP-5 · No end-to-end tests.** Pure logic is covered by unit tests; rendering and the refresh cycle are verified by hand.
+**GAP-5 · No browser-level tests.** The DOM is now covered by suites that boot the real application in jsdom, which catches wiring, rendering and state. What no test sees is how any of it *looks*: layout, contrast and motion are still verified by eye.
 
 ---
 
@@ -297,7 +297,7 @@ Writing this specification after the fact exposed behaviour that existed by acci
 
 Out of scope for 1.0, ordered by value against effort:
 
-1. Close `GAP-5`, then `GAP-1` — coverage and a graceful cold start.
+1. Visual regression, the one gap tests cannot close by reading the DOM.
 2. Installable as a PWA with a service worker: the use case is a phone at a till, often without signal.
 3. Share a result as text or an image.
 4. Selectable rate providers, should a second CORS-enabled source appear.
