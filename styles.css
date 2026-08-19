@@ -1052,6 +1052,135 @@ body::after {
   box-shadow: 0 0 12px color-mix(in srgb, var(--tone) 70%, transparent);
 }
 
+/* --------------------------------------------------------------- Motion */
+/*
+ * Movement here is meant to explain, not decorate: things that arrive slide in
+ * from where they came from, things that respond move under the finger, and
+ * the gauge draws itself so the scale reads as a scale. All of it is switched
+ * off wholesale by prefers-reduced-motion at the end of this file.
+ */
+
+/* Panels arrive in reading order on load. */
+.layout > .panel,
+.layout > .disclosure,
+.layout > .masthead {
+  animation: rise-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.layout > *:nth-child(1) { animation-delay: 0.02s; }
+.layout > *:nth-child(2) { animation-delay: 0.08s; }
+.layout > *:nth-child(3) { animation-delay: 0.14s; }
+.layout > *:nth-child(4) { animation-delay: 0.2s; }
+.layout > *:nth-child(5) { animation-delay: 0.26s; }
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* A conversion that was not there a moment ago slides in from the left edge. */
+.result.is-entering {
+  animation: result-in 0.42s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+@keyframes result-in {
+  from { opacity: 0; transform: translateX(-14px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Disclosure contents unfold rather than appearing whole. */
+.disclosure[open] .disclosure-body {
+  animation: unfold 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes unfold {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: none; }
+}
+
+/*
+ * The gauge draws its own scale when the group opens, left to right, so the
+ * bands read as a progression instead of a static ring.
+ */
+.disclosure[open] .gauge-zone {
+  /* Longer than the full semicircle (πr ≈ 377) so no band shows a gap. */
+  stroke-dasharray: 400;
+  animation: sweep 0.9s ease-out backwards;
+}
+
+.disclosure[open] .gauge-zone:nth-child(1) { animation-delay: 0.05s; }
+.disclosure[open] .gauge-zone:nth-child(2) { animation-delay: 0.14s; }
+.disclosure[open] .gauge-zone:nth-child(3) { animation-delay: 0.23s; }
+.disclosure[open] .gauge-zone:nth-child(4) { animation-delay: 0.32s; }
+
+@keyframes sweep {
+  from { stroke-dashoffset: 400; opacity: 0; }
+  to { stroke-dashoffset: 0; opacity: 0.85; }
+}
+
+.disclosure[open] .gauge-needle {
+  animation: needle-settle 1.1s cubic-bezier(0.34, 1.36, 0.5, 1) backwards;
+}
+
+@keyframes needle-settle {
+  from { opacity: 0; transform: rotate(-14deg); }
+  40% { opacity: 1; }
+  to { opacity: 1; }
+}
+
+/* Anything pressable gives under the finger. */
+.button-ghost:active:not(:disabled),
+.mode-toggle:active,
+.segmented button:active,
+.theme-toggle:active,
+.disclosure-summary:active {
+  transform: scale(0.96);
+}
+
+.theme-toggle:active {
+  transform: scale(0.9) rotate(-12deg);
+}
+
+.button-ghost,
+.mode-toggle,
+.segmented button,
+.disclosure-summary {
+  transition: color 0.18s, border-color 0.18s, background 0.18s, transform 0.12s ease;
+}
+
+/* The amount field lifts as you use it — it is the one input that matters. */
+.input-lead {
+  transition: border-color 0.18s, box-shadow 0.25s, background 0.18s, transform 0.25s ease;
+}
+
+.input-lead:focus {
+  transform: translateY(-2px);
+}
+
+/* The reading counts itself up rather than snapping between figures. */
+.reading {
+  transition: color 0.4s, text-shadow 0.4s, transform 0.35s cubic-bezier(0.34, 1.36, 0.5, 1);
+}
+
+.reading[data-tone] {
+  animation: reading-pop 0.4s cubic-bezier(0.34, 1.36, 0.5, 1);
+}
+
+@keyframes reading-pop {
+  from { transform: scale(0.92); }
+  to { transform: scale(1); }
+}
+
+/* The live pip breathes while the rates are current. */
+.status.is-live {
+  animation: settle 0.5s ease;
+}
+
+@keyframes settle {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}
+
 /* ------------------------------------------------------------ Utilities */
 .tone-good { color: var(--good); }
 .tone-warn { color: var(--warn); }
