@@ -28,9 +28,9 @@ export const RATES = {
 };
 
 export const STORAGE_KEYS = {
-  preferences: 'calcudolar.preferences',
-  theme: 'calcudolar.theme',
-  rates: 'calcudolar.rates',
+  preferences: 'tasazo.preferences',
+  theme: 'tasazo.theme',
+  rates: 'tasazo.rates',
 };
 
 /** Lets pending promises and timers settle before assertions run. */

@@ -1,5 +1,5 @@
 {
-  "name": "calcudolar",
+  "name": "tasazo",
   "version": "1.0.0",
   "description": "Works out how much a bolivar charge really costs in dollars and euros, and how far the merchant's rate strays from the official one.",
   "type": "module",
