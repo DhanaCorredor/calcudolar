@@ -22,7 +22,7 @@ import {
   buildGauge,
   elements,
   markInvalid,
-  rateInputs,
+  rateFields,
   renderComparison,
   renderGauge,
   renderResults,
@@ -59,10 +59,17 @@ function savePreferences() {
     amount: elements.amount.value,
     merchantRate: elements.merchantRate.value,
     // Automatic rates come back from the feed, so only manual ones are kept.
-    officialRate: state.autoRates.official ? '' : elements.officialRate.value,
-    parallelRate: state.autoRates.parallel ? '' : elements.parallelRate.value,
+    rates: {
+      official: state.autoRates.official ? null : readRateGroup('official'),
+      parallel: state.autoRates.parallel ? null : readRateGroup('parallel'),
+    },
   });
 }
+
+const readRateGroup = (reference) => ({
+  usd: rateFields[reference].usd.value,
+  eur: rateFields[reference].eur.value,
+});
 
 function restorePreferences() {
   const saved = readJson(STORAGE_KEYS.preferences);
@@ -80,8 +87,13 @@ function restorePreferences() {
   elements.autoRefreshToggle.checked = saved.autoRefresh !== false;
   elements.amount.value = saved.amount ?? '';
   elements.merchantRate.value = saved.merchantRate ?? '';
-  if (!state.autoRates.official) elements.officialRate.value = saved.officialRate ?? '';
-  if (!state.autoRates.parallel) elements.parallelRate.value = saved.parallelRate ?? '';
+
+  for (const reference of Object.keys(rateFields)) {
+    const group = saved.rates?.[reference];
+    if (state.autoRates[reference] || !group) continue;
+    rateFields[reference].usd.value = group.usd ?? '';
+    rateFields[reference].eur.value = group.eur ?? '';
+  }
 
   revealGroupsHoldingState();
 }
@@ -101,14 +113,18 @@ function revealGroupsHoldingState() {
 function applySnapshotToInputs({ flash = false } = {}) {
   if (!state.snapshot) return;
 
-  const values = {
-    official: state.snapshot.usd.official,
-    parallel: state.snapshot.usd.parallel,
-  };
+  for (const [reference, fields] of Object.entries(rateFields)) {
+    if (!state.autoRates[reference]) continue;
 
-  for (const [reference, value] of Object.entries(values)) {
-    if (!state.autoRates[reference] || value === null) continue;
-    setRateValue(rateInputs[reference], formatRate(value), { flash });
+    const published = {
+      usd: state.snapshot.usd[reference],
+      eur: state.snapshot.eur[reference],
+    };
+
+    for (const [currency, input] of Object.entries(fields)) {
+      if (published[currency] === null) continue;
+      setRateValue(input, formatRate(published[currency]), { flash });
+    }
   }
 }
 
@@ -154,30 +170,29 @@ function scheduleAutoRefresh() {
 function update() {
   const amount = readField(elements.amount);
   const merchantRate = readField(elements.merchantRate);
-  const officialRate = readField(elements.officialRate);
-  const parallelRate = readField(elements.parallelRate);
 
-  const snapshot = state.snapshot;
-  const cross = snapshot ? crossRate(snapshot.eur.official, snapshot.usd.official) : null;
-
-  /** Published euro rates apply only while the field mirrors the live feed. */
-  const publishedEuroRate = {
-    official: state.autoRates.official && snapshot ? snapshot.eur.official : null,
-    parallel: state.autoRates.parallel && snapshot ? snapshot.eur.parallel : null,
+  const rates = {
+    official: {
+      usd: readField(rateFields.official.usd),
+      eur: readField(rateFields.official.eur),
+    },
+    parallel: {
+      usd: readField(rateFields.parallel.usd),
+      eur: readField(rateFields.parallel.eur),
+    },
   };
+
+  /*
+   * The merchant quotes in dollars only, so its euro equivalent is derived
+   * from the official pair. Reading the cross off the fields rather than the
+   * snapshot means it survives offline, where the rates were typed by hand.
+   */
+  const cross = crossRate(rates.official.eur, rates.official.usd);
 
   const charges = {
     merchant: chargeFor(amount, merchantRate, toEuroRate(merchantRate, cross)),
-    official: chargeFor(
-      amount,
-      officialRate,
-      publishedEuroRate.official ?? toEuroRate(officialRate, cross),
-    ),
-    parallel: chargeFor(
-      amount,
-      parallelRate,
-      publishedEuroRate.parallel ?? toEuroRate(parallelRate, cross),
-    ),
+    official: chargeFor(amount, rates.official.usd, rates.official.eur),
+    parallel: chargeFor(amount, rates.parallel.usd, rates.parallel.eur),
   };
 
   renderResults(
@@ -187,8 +202,8 @@ function update() {
   );
 
   const percentages = {
-    official: overchargePercent(merchantRate, officialRate),
-    parallel: overchargePercent(merchantRate, parallelRate),
+    official: overchargePercent(merchantRate, rates.official.usd),
+    parallel: overchargePercent(merchantRate, rates.parallel.usd),
   };
 
   for (const reference of ['official', 'parallel']) {
@@ -242,6 +257,7 @@ function toggleRateMode(reference, isAuto) {
 function clearEverything() {
   elements.amount.value = '';
   elements.merchantRate.value = '';
+  elements.merchantRate.classList.remove('is-invalid');
   toggleRateMode('official', true);
   toggleRateMode('parallel', true);
   state.referenceMode = REFERENCE_MODES.official;
@@ -264,13 +280,15 @@ function bindEvents() {
     });
   }
 
-  for (const [reference, input] of Object.entries(rateInputs)) {
-    input.addEventListener('input', () => {
-      // Typing over an automatic rate is how you take manual control of it.
-      if (state.autoRates[reference]) toggleRateMode(reference, false);
-      update();
-      savePreferences();
-    });
+  for (const [reference, fields] of Object.entries(rateFields)) {
+    for (const input of Object.values(fields)) {
+      input.addEventListener('input', () => {
+        // Typing over an automatic rate is how you take manual control of it.
+        if (state.autoRates[reference]) toggleRateMode(reference, false);
+        update();
+        savePreferences();
+      });
+    }
   }
 
   for (const toggle of document.querySelectorAll('.mode-toggle[data-rate]')) {

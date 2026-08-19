@@ -470,6 +470,33 @@ body::after {
   margin-top: 0;
 }
 
+/* One source, both its currencies, one auto/manual switch over the pair. */
+.rate-group {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--well);
+}
+
+.rate-group + .rate-group {
+  margin-top: 12px;
+}
+
+.rate-group-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 0 10px;
+}
+
+.input-rate {
+  padding-left: 52px;
+  font-size: 0.95rem;
+}
+
 .field-label {
   display: flex;
   flex-wrap: wrap;

@@ -23,7 +23,9 @@ export const elements = {
   amount: byId('amountInput'),
   merchantRate: byId('merchantRateInput'),
   officialRate: byId('officialRateInput'),
+  officialEuro: byId('officialEuroInput'),
   parallelRate: byId('parallelRateInput'),
+  parallelEuro: byId('parallelEuroInput'),
 
   statusBar: byId('statusBar'),
   statusTitle: byId('statusTitle'),
@@ -62,10 +64,14 @@ export const elements = {
   toast: byId('toast'),
 };
 
-/** Rate inputs, keyed the way the rest of the app refers to them. */
-export const rateInputs = {
-  official: elements.officialRate,
-  parallel: elements.parallelRate,
+/**
+ * Rate inputs, grouped by source. Each source carries both currencies: the
+ * feed publishes a euro rate of its own, and deriving one from the dollar rate
+ * would throw that away.
+ */
+export const rateFields = {
+  official: { usd: elements.officialRate, eur: elements.officialEuro },
+  parallel: { usd: elements.parallelRate, eur: elements.parallelEuro },
 };
 
 /* ------------------------------------------------------------------ Gauge */
@@ -323,10 +329,11 @@ export function setRateValue(input, text, { flash = false } = {}) {
 }
 
 export function setRateMode(reference, isAuto) {
-  const input = rateInputs[reference];
   const toggle = document.querySelector(`.mode-toggle[data-rate="${reference}"]`);
 
-  input.classList.toggle('is-auto', isAuto);
+  for (const input of Object.values(rateFields[reference])) {
+    input.classList.toggle('is-auto', isAuto);
+  }
   toggle.classList.toggle('is-auto', isAuto);
   toggle.setAttribute('aria-pressed', String(isAuto));
   toggle.textContent = isAuto ? strings.rateModes.auto : strings.rateModes.manual;
