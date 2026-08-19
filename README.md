@@ -124,7 +124,7 @@ The dependency flow runs one way: `main` orchestrates, `ui` only draws, `calcula
 
 ### Where the rates come from
 
-[`ve.dolarapi.com`](https://ve.dolarapi.com), which republishes the [BCV](https://www.bcv.org.ve/)'s official figures alongside the parallel-market average.
+[`ve.dolarapi.com`](https://dolarapi.com), which republishes the [BCV](https://www.bcv.org.ve/)'s official figures alongside the parallel-market average.
 
 The BCV's own site cannot be read from a browser: its TLS chain is incomplete and it sends no CORS headers, so a `fetch()` fails before reading a byte. Consuming it directly would require a backend, which this project deliberately does without. See `RATE-2` in the [specification](SPEC.md).
 
