@@ -62,59 +62,21 @@
 }
 
 /*
- * The dark palette, declared once and pointed at twice: by the system
- * preference where no choice has been stored, and by an explicit choice.
+ * The dark palette applies only on request. Light is the default whatever the
+ * device prefers, so there is no prefers-color-scheme branch here.
  */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --bg: #07070f;
-    --surface: rgba(255, 255, 255, 0.045);
-    --border: rgba(255, 255, 255, 0.1);
-    --border-strong: rgba(255, 255, 255, 0.18);
-    --well: rgba(0, 0, 0, 0.32);
-    --wash: rgba(255, 255, 255, 0.05);
-    --glow: rgba(255, 255, 255, 0.16);
-
-    --text: #eef1fb;
-    --text-muted: #8e93ad;
-    --text-faint: #5a5f78;
-
-    --merchant: #00e5ff;
-    --official: #22e08a;
-    --parallel: #ff9f1c;
-    --euro: #b18cff;
-
-    --good: #22e08a;
-    --warn: #ffd23f;
-    --bad: #ff9f1c;
-    --critical: #ff2e63;
-    --bargain: #00e5ff;
-
-    --backdrop-warm: rgba(255, 46, 99, 0.33);
-    --backdrop-cool: rgba(0, 229, 255, 0.27);
-    --grid-line: rgba(255, 255, 255, 0.035);
-    --panel-shadow: 0 20px 50px -25px #000;
-    --toast-bg: rgba(20, 20, 32, 0.92);
-    --needle: #ffffff;
-    --needle-hub: #0b0b16;
-    --input-bg: rgba(0, 0, 0, 0.35);
-    --input-bg-focus: rgba(0, 0, 0, 0.5);
-    --track-bg: rgba(0, 0, 0, 0.5);
-  }
-}
-
 :root[data-theme='dark'] {
-  --bg: #07070f;
-  --surface: rgba(255, 255, 255, 0.045);
+  --bg: #08090a;
+  --surface: rgba(255, 255, 255, 0.05);
   --border: rgba(255, 255, 255, 0.1);
   --border-strong: rgba(255, 255, 255, 0.18);
-  --well: rgba(0, 0, 0, 0.32);
-  --wash: rgba(255, 255, 255, 0.05);
+  --well: rgba(0, 0, 0, 0.4);
+  --wash: rgba(255, 255, 255, 0.055);
   --glow: rgba(255, 255, 255, 0.16);
 
-  --text: #eef1fb;
-  --text-muted: #8e93ad;
-  --text-faint: #5a5f78;
+  --text: #f2f3f4;
+  --text-muted: #9a9ca1;
+  --text-faint: #67696f;
 
   --merchant: #00e5ff;
   --official: #22e08a;
@@ -127,13 +89,14 @@
   --critical: #ff2e63;
   --bargain: #00e5ff;
 
-  --backdrop-warm: rgba(255, 46, 99, 0.33);
-  --backdrop-cool: rgba(0, 229, 255, 0.27);
+  /* Neutral glows: any colour here casts a tint over the whole page. */
+  --backdrop-warm: rgba(255, 255, 255, 0.07);
+  --backdrop-cool: rgba(255, 255, 255, 0.055);
   --grid-line: rgba(255, 255, 255, 0.035);
   --panel-shadow: 0 20px 50px -25px #000;
-  --toast-bg: rgba(20, 20, 32, 0.92);
+  --toast-bg: rgba(18, 18, 19, 0.94);
   --needle: #ffffff;
-  --needle-hub: #0b0b16;
+  --needle-hub: #0d0d0e;
   --input-bg: rgba(0, 0, 0, 0.35);
   --input-bg-focus: rgba(0, 0, 0, 0.5);
   --track-bg: rgba(0, 0, 0, 0.5);
@@ -264,6 +227,15 @@ body::after {
 .theme-toggle:focus-visible {
   outline: 2px solid var(--merchant);
   outline-offset: 2px;
+}
+
+.brand-mark {
+  display: block;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 10px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px -10px rgba(10, 127, 156, 0.7);
 }
 
 .masthead h1 {

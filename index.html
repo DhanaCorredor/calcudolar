@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="light dark">
-  <meta name="theme-color" content="#f5f6fb" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#07070f" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f5f6fb">
   <title>Calcudolar · Bolívares a dólares y euros</title>
   <meta name="description" content="Escribe un monto en bolívares y mira al instante cuánto es en dólares y en euros, con la tasa del BCV y la del paralelo actualizadas solas.">
 
@@ -13,7 +12,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💸</text></svg>">
+  <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="logo.svg">
 
   <!--
     Applies a stored theme before the first paint. Deferring this to the module
@@ -33,6 +33,7 @@
   <div class="layout">
     <header class="masthead">
       <button type="button" class="theme-toggle" id="themeToggle" aria-label="Cambiar el tema">🌙</button>
+      <img class="brand-mark" src="logo.svg" width="52" height="52" alt="">
       <h1>Calcudolar</h1>
       <p class="tagline">
         Escribe cuánto te van a cobrar en bolívares y mira al instante cuánto es en
