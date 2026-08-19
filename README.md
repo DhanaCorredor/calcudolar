@@ -48,7 +48,6 @@
 ---
 -->
 
-
 ## The problem
 
 Venezuelan prices are quoted in foreign currency but charged in bolívares, so the same question comes up several times a day: *how much is this actually worth?*
