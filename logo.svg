@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Calcudolar">
+  <title>Calcudolar</title>
+  <defs>
+    <linearGradient id="calcudolarMark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#12b877"/>
+      <stop offset="1" stop-color="#0a7f9c"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="15" fill="url(#calcudolarMark)"/>
+  <!-- Dollar sign drawn as a path so the mark never depends on a font. -->
+  <g fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M41 23c0-4.6-4.4-7-9.4-7S22 18.4 22 23c0 5.4 6 6.8 10 7.6 4 0.8 10 2.2 10 7.6 0 4.6-4.4 7-9.4 7S23 42.8 23 38.2"/>
+    <path d="M32 10v44"/>
+  </g>
+</svg>
