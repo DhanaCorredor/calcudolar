@@ -82,7 +82,9 @@ difference = merchant currency − reference currency
 
 Reported in both dollars and euros.
 
-**CALC-4 · Euro conversion.** Where a Bs/€ rate is published for the same source, it is used directly. Where none exists — the merchant's rate, and any rate typed by hand — it is derived from the BCV cross rate:
+**CALC-4 · Euro conversion.** Each reference carries its own Bs/€ rate, published by the source or typed by the user, and euros are converted with it directly — never derived. This matters to anyone paying from the euro zone, where the parallel euro rate is the figure that applies and is not a function of the dollar one.
+
+Only the merchant's rate needs deriving, because a shop quotes in dollars alone. It uses the cross rate taken from the official pair **as those fields currently stand**, so the derivation holds up offline with hand-typed rates:
 
 ```text
 EUR/USD cross = official EUR rate ÷ official USD rate
@@ -122,7 +124,7 @@ euros          = amount ÷ Bs/€
 
 The status strip always shows the rate in force, its age in plain language, and the BCV valuation date.
 
-**RATE-6 · Auto/manual state machine.** Each reference rate is independently auto or manual:
+**RATE-6 · Auto/manual state machine.** Each reference is a *pair* of rates — Bs/$ and Bs/€ — governed by one switch, since both come from the same source and are trusted or replaced together. Each reference is independently auto or manual:
 
 - Starts **auto**, receiving every new value with a brief visual flash.
 - Typing in the field switches it to **manual** at once; it stops updating and its value persists between sessions.
@@ -277,7 +279,7 @@ and the rest of the interface stays usable.
 
 Writing this specification after the fact exposed behaviour that existed by accident of implementation rather than by decision. Three were corrected while restructuring the project — lenient parsing, a missing text alternative on the gauge, and reconnection ignoring the refresh switch. These remain:
 
-**GAP-1 · No euros on a first offline run.** The cross rate depends on BCV data. Opening the app for the first time with no network and typing rates by hand makes the euro column vanish without explanation. *Proposal: an editable cross rate as a fallback, or a seeded value.*
+**GAP-2b · Merchant euros still need the official pair.** Every reference now carries its own euro rate, so the euro column survives offline (this closed the former `GAP-1`). One derivation remains: the merchant's rate is quoted in dollars alone, so its euro equivalent comes from the official cross. Clearing the official euro field therefore removes the merchant's euro figure while leaving its dollar figure intact — correct, but unexplained on screen.
 
 **GAP-2 · One verdict for every bargain.** −1 % and −40 % read identically. The alarm scale is graduated; the relief scale is not.
 

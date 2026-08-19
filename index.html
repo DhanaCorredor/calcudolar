@@ -169,33 +169,65 @@
       </summary>
 
       <div class="disclosure-body">
-        <div class="field-pair">
-          <div class="field">
-            <label class="field-label" for="officialRateInput">
-              <span class="field-name">Tasa BCV <span class="chip chip-official">Oficial</span></span>
-              <button type="button" class="mode-toggle is-auto" data-rate="official"
-                      aria-pressed="true">auto</button>
-            </label>
-            <div class="input-shell">
-              <span class="input-prefix" aria-hidden="true">Bs.</span>
-              <input type="text" id="officialRateInput" class="input is-auto" inputmode="decimal"
-                     placeholder="0,00" autocomplete="off">
+        <fieldset class="rate-group">
+          <legend class="rate-group-head">
+            <span class="field-name">Tasa BCV <span class="chip chip-official">Oficial</span></span>
+            <button type="button" class="mode-toggle is-auto" data-rate="official"
+                    aria-pressed="true">auto</button>
+          </legend>
+          <div class="field-pair">
+            <div class="field">
+              <label class="field-label" for="officialRateInput">
+                <span class="field-name">Dólar</span>
+              </label>
+              <div class="input-shell">
+                <span class="input-prefix" aria-hidden="true">Bs/$</span>
+                <input type="text" id="officialRateInput" class="input is-auto input-rate"
+                       inputmode="decimal" placeholder="0,00" autocomplete="off">
+              </div>
+            </div>
+            <div class="field">
+              <label class="field-label" for="officialEuroInput">
+                <span class="field-name">Euro</span>
+              </label>
+              <div class="input-shell">
+                <span class="input-prefix" aria-hidden="true">Bs/€</span>
+                <input type="text" id="officialEuroInput" class="input is-auto input-rate"
+                       inputmode="decimal" placeholder="0,00" autocomplete="off">
+              </div>
             </div>
           </div>
+        </fieldset>
 
-          <div class="field">
-            <label class="field-label" for="parallelRateInput">
-              <span class="field-name">Tasa paralela <span class="chip chip-parallel">Monitor</span></span>
-              <button type="button" class="mode-toggle is-auto" data-rate="parallel"
-                      aria-pressed="true">auto</button>
-            </label>
-            <div class="input-shell">
-              <span class="input-prefix" aria-hidden="true">Bs.</span>
-              <input type="text" id="parallelRateInput" class="input is-auto" inputmode="decimal"
-                     placeholder="0,00" autocomplete="off">
+        <fieldset class="rate-group">
+          <legend class="rate-group-head">
+            <span class="field-name">Tasa paralela <span class="chip chip-parallel">Monitor</span></span>
+            <button type="button" class="mode-toggle is-auto" data-rate="parallel"
+                    aria-pressed="true">auto</button>
+          </legend>
+          <div class="field-pair">
+            <div class="field">
+              <label class="field-label" for="parallelRateInput">
+                <span class="field-name">Dólar</span>
+              </label>
+              <div class="input-shell">
+                <span class="input-prefix" aria-hidden="true">Bs/$</span>
+                <input type="text" id="parallelRateInput" class="input is-auto input-rate"
+                       inputmode="decimal" placeholder="0,00" autocomplete="off">
+              </div>
+            </div>
+            <div class="field">
+              <label class="field-label" for="parallelEuroInput">
+                <span class="field-name">Euro</span>
+              </label>
+              <div class="input-shell">
+                <span class="input-prefix" aria-hidden="true">Bs/€</span>
+                <input type="text" id="parallelEuroInput" class="input is-auto input-rate"
+                       inputmode="decimal" placeholder="0,00" autocomplete="off">
+              </div>
             </div>
           </div>
-        </div>
+        </fieldset>
 
         <p class="note" id="euroNote">Tasas del euro: pendientes de la primera consulta.</p>
 
