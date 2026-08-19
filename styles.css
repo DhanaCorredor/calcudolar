@@ -44,6 +44,7 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -166,6 +167,7 @@ body::after {
   border: 1px solid var(--border-strong);
   border-radius: 999px;
   background: var(--surface);
+  -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   color: var(--text-muted);
   font-size: 0.72rem;
@@ -217,8 +219,8 @@ body::after {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface);
-  backdrop-filter: blur(18px) saturate(140%);
   -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
   box-shadow: 0 20px 50px -25px #000, inset 0 1px 0 rgba(255, 255, 255, 0.07);
 }
 
@@ -555,6 +557,7 @@ body::after {
   color: var(--text-muted);
   font-size: 0.8rem;
   cursor: pointer;
+  -webkit-user-select: none;
   user-select: none;
 }
 
@@ -890,6 +893,7 @@ body::after {
   border: 1px solid var(--border-strong);
   border-radius: 13px;
   background: rgba(20, 20, 32, 0.92);
+  -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
   font-size: 0.86rem;
   font-weight: 500;
