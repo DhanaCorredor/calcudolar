@@ -29,17 +29,28 @@ export const STALE_AFTER_MS = 45 * 60 * 1000;
 export const STORAGE_KEYS = {
   preferences: 'calcudolar.preferences',
   ratesCache: 'calcudolar.rates',
+  // Also read by the inline script in index.html, which applies the stored
+  // theme before first paint. Keep the two in step.
+  theme: 'calcudolar.theme',
 };
+
+export const THEMES = { light: 'light', dark: 'dark' };
 
 /** Highest overcharge the needle can point at. Larger values saturate it. */
 export const GAUGE_MAX_PERCENT = 60;
 
-/** Coloured bands of the gauge arc, as upper bounds in overcharge percent. */
+/**
+ * Bands of the gauge arc, as upper bounds in overcharge percent.
+ *
+ * Bands and verdicts name a tone rather than a colour: the stylesheet decides
+ * what each tone looks like, which is what lets a second theme exist without
+ * JavaScript knowing about it.
+ */
 export const GAUGE_ZONES = [
-  { maxPercent: 3, color: '#22e08a' },
-  { maxPercent: 10, color: '#ffd23f' },
-  { maxPercent: 25, color: '#ff9f1c' },
-  { maxPercent: 60, color: '#ff2e63' },
+  { maxPercent: 3, tone: 'good' },
+  { maxPercent: 10, tone: 'warn' },
+  { maxPercent: 25, tone: 'bad' },
+  { maxPercent: 60, tone: 'critical' },
 ];
 
 /**
@@ -53,18 +64,17 @@ export const BARGAIN_THRESHOLD_PERCENT = -0.5;
  * `maxPercent` is not exceeded wins. Wording lives in `strings.js`.
  */
 export const VERDICT_LEVELS = [
-  { key: 'safe', maxPercent: 0.5, tone: 'good', color: '#22e08a' },
-  { key: 'fair', maxPercent: 3, tone: 'good', color: '#22e08a' },
-  { key: 'mild', maxPercent: 10, tone: 'warn', color: '#ffd23f' },
-  { key: 'painful', maxPercent: 25, tone: 'bad', color: '#ff9f1c' },
-  { key: 'severe', maxPercent: 50, tone: 'critical', color: '#ff2e63' },
-  { key: 'critical', maxPercent: Infinity, tone: 'critical', color: '#ff2e63' },
+  { key: 'safe', maxPercent: 0.5, tone: 'good' },
+  { key: 'fair', maxPercent: 3, tone: 'good' },
+  { key: 'mild', maxPercent: 10, tone: 'warn' },
+  { key: 'painful', maxPercent: 25, tone: 'bad' },
+  { key: 'severe', maxPercent: 50, tone: 'critical' },
+  { key: 'critical', maxPercent: Infinity, tone: 'critical' },
 ];
 
 export const BARGAIN_VERDICT = {
   key: 'bargain',
-  tone: 'good',
-  color: '#00e5ff',
+  tone: 'bargain',
 };
 
 /** Which reference rate the gauge measures the merchant against. */

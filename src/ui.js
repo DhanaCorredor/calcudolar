@@ -38,6 +38,7 @@ export const elements = {
 
   merchantDisclosure: byId('merchantDisclosure'),
   ratesDisclosure: byId('ratesDisclosure'),
+  themeToggle: byId('themeToggle'),
 
   gauge: byId('gauge'),
   gaugeTrack: byId('gaugeTrack'),
@@ -97,7 +98,7 @@ export function buildGauge() {
     const start = toDegrees(lowerBound) + (lowerBound === 0 ? 0 : 1.2);
     const end = toDegrees(zone.maxPercent);
     lowerBound = zone.maxPercent;
-    return `<path d="${arcPath(start, end)}" stroke="${zone.color}"/>`;
+    return `<path class="gauge-zone" data-tone="${zone.tone}" d="${arcPath(start, end)}"/>`;
   }).join('');
 
   const ticks = [];
@@ -123,8 +124,7 @@ export function renderGauge({ percent, referenceName, verdict }) {
   if (percent === null || verdict === null) {
     elements.gaugeNeedle.style.transform = 'rotate(0deg)';
     elements.readingValue.innerHTML = '—<small>%</small>';
-    elements.readingValue.style.color = '';
-    elements.readingValue.style.textShadow = '';
+    delete elements.readingValue.dataset.tone;
     elements.readingLabel.textContent = strings.gauge.idle;
     elements.gauge.setAttribute('aria-label', strings.gauge.ariaLabel(null));
 
@@ -139,8 +139,7 @@ export function renderGauge({ percent, referenceName, verdict }) {
   const magnitude = formatPercent(Math.abs(percent));
   const sign = percent < 0 ? '−' : '';
   elements.readingValue.innerHTML = `${sign}${magnitude}<small>%</small>`;
-  elements.readingValue.style.color = verdict.color;
-  elements.readingValue.style.textShadow = `0 0 34px ${verdict.color}66`;
+  elements.readingValue.dataset.tone = verdict.tone;
 
   elements.readingLabel.textContent =
     percent >= 0
@@ -165,8 +164,9 @@ function applyVerdict(copy, verdict) {
   elements.verdictDetail.textContent = copy.detail;
 
   elements.verdictTitle.className = `verdict-title${verdict ? ` tone-${verdict.tone}` : ''}`;
-  elements.verdictBox.style.borderColor = verdict ? `${verdict.color}66` : '';
-  elements.verdictBox.style.background = verdict ? `${verdict.color}12` : '';
+
+  if (verdict) elements.verdictBox.dataset.tone = verdict.tone;
+  else delete elements.verdictBox.dataset.tone;
 }
 
 /* ---------------------------------------------------------------- Results */
@@ -223,6 +223,7 @@ export function renderComparison(reference, data) {
     percent.textContent = '—';
     percent.className = 'comparison-percent';
     bar.style.width = '0%';
+    delete bar.dataset.tone;
     return;
   }
 
@@ -248,8 +249,7 @@ export function renderComparison(reference, data) {
   percent.className = `comparison-percent tone-${data.verdict.tone}`;
 
   bar.style.width = `${Math.min(100, (Math.abs(data.percent) / GAUGE_MAX_PERCENT) * 100)}%`;
-  bar.style.background = data.verdict.color;
-  bar.style.boxShadow = `0 0 12px ${data.verdict.color}`;
+  bar.dataset.tone = data.verdict.tone;
 }
 
 /* ------------------------------------------------------------ Rate status */
@@ -343,6 +343,19 @@ export function setReferenceMode(mode) {
 
 export function setRefreshBusy(isBusy) {
   elements.refreshButton.disabled = isBusy;
+}
+
+/** The button offers the theme you would switch *to*, not the one you are in. */
+export function setThemeToggle(theme) {
+  const goingToLight = theme === 'dark';
+  elements.themeToggle.textContent = goingToLight
+    ? strings.theme.lightIcon
+    : strings.theme.darkIcon;
+  elements.themeToggle.setAttribute(
+    'aria-label',
+    goingToLight ? strings.theme.toLight : strings.theme.toDark,
+  );
+  elements.themeToggle.title = goingToLight ? strings.theme.toLight : strings.theme.toDark;
 }
 
 /* ----------------------------------------------------------------- Toast */
