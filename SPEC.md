@@ -1,10 +1,10 @@
-# Specification · Calcudolar
+# Specification · Tasazo
 
 **Version:** 1.1
 **Status:** current
 **Last revised:** 2026-08-19
 
-This document is the source of truth for *what* Calcudolar does and what counts as correct. The code implements this specification, not the other way round: where the two disagree, either the code is fixed or this document is amended deliberately — never silently.
+This document is the source of truth for *what* Tasazo does and what counts as correct. The code implements this specification, not the other way round: where the two disagree, either the code is fixed or this document is amended deliberately — never silently.
 
 Requirements carry identifiers (`CALC-1`, `RATE-3`, …) so that tests, issues and commit messages can point at them.
 
@@ -12,7 +12,7 @@ Requirements carry identifiers (`CALC-1`, `RATE-3`, …) so that tests, issues a
 
 ## 1. Purpose
 
-Venezuelan prices are quoted in foreign currency but charged in bolívares. Calcudolar answers the question that comes up several times a day: **how much is this in dollars and euros?**
+Venezuelan prices are quoted in foreign currency but charged in bolívares. Tasazo answers the question that comes up several times a day: **how much is this in dollars and euros?**
 
 Type the bolívar amount and read the conversion at the official BCV rate and at the parallel rate, in both currencies, without touching anything else. The rates fetch themselves.
 

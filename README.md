@@ -2,7 +2,7 @@
   <img src="logo.svg" width="72" height="72" alt="">
 </p>
 
-<h1 align="center">Calcudolar</h1>
+<h1 align="center">Tasazo</h1>
 
 <p align="center">
   <em>How much is that in dollars?</em><br>
@@ -12,12 +12,12 @@
 </p>
 
 <p align="center">
-  <a href="https://calcudolar-six.vercel.app"><strong>Live demo →</strong></a>
+  <a href="https://tasazo.vercel.app"><strong>Live demo →</strong></a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/DhanaCorredor/calcudolar/actions/workflows/ci.yml">
-    <img src="https://github.com/DhanaCorredor/calcudolar/actions/workflows/ci.yml/badge.svg" alt="CI status">
+  <a href="https://github.com/DhanaCorredor/tasazo/actions/workflows/ci.yml">
+    <img src="https://github.com/DhanaCorredor/tasazo/actions/workflows/ci.yml/badge.svg" alt="CI status">
   </a>
   <img src="https://img.shields.io/badge/tests-73-brightgreen" alt="73 tests">
   <img src="https://img.shields.io/badge/dependencies-0%20runtime-brightgreen" alt="No runtime dependencies">
@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  <a href="https://calcudolar-six.vercel.app">Demo</a> ·
+  <a href="https://tasazo.vercel.app">Demo</a> ·
   <a href="SPEC.md">Specification</a> ·
   <a href="#architecture">Architecture</a> ·
   <a href="#getting-started">Getting started</a>
@@ -41,7 +41,7 @@
 ## What it looks like
 
 <p align="center">
-  <img src="docs/screenshot-light.png" width="800" alt="Calcudolar converting a bolívar amount into dollars and euros">
+  <img src="docs/screenshot-light.png" width="800" alt="Tasazo converting a bolívar amount into dollars and euros">
   <img src="docs/screenshot-dark.png" width="800" alt="The Infartómetro showing an overcharge against the official rate">
 </p>
 
@@ -52,7 +52,7 @@
 
 Venezuelan prices are quoted in foreign currency but charged in bolívares, so the same question comes up several times a day: *how much is this actually worth?*
 
-Calcudolar answers it in one step. Type the bolívar amount and read it in dollars and euros, at both the official BCV rate and the parallel rate. Nothing else to fill in — the rates fetch themselves.
+Tasazo answers it in one step. Type the bolívar amount and read it in dollars and euros, at both the official BCV rate and the parallel rate. Nothing else to fill in — the rates fetch themselves.
 
 ## Features
 

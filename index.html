@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#f5f6fb">
-  <title>Calcudolar · Bolívares a dólares y euros</title>
+  <title>Tasazo · Bolívares a dólares y euros</title>
   <meta name="description" content="Escribe un monto en bolívares y mira al instante cuánto es en dólares y en euros, con la tasa del BCV y la del paralelo actualizadas solas.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,7 +22,7 @@
   -->
   <script>
     try {
-      const saved = JSON.parse(localStorage.getItem('calcudolar.theme'));
+      const saved = JSON.parse(localStorage.getItem('tasazo.theme'));
       if (saved === 'light' || saved === 'dark') document.documentElement.dataset.theme = saved;
     } catch (error) { /* storage unavailable: the system preference decides */ }
   </script>
@@ -34,7 +34,7 @@
     <header class="masthead">
       <button type="button" class="theme-toggle" id="themeToggle" aria-label="Cambiar el tema">🌙</button>
       <img class="brand-mark" src="logo.svg" width="52" height="52" alt="">
-      <h1>Calcudolar</h1>
+      <h1>Tasazo</h1>
       <p class="tagline">
         Escribe cuánto te van a cobrar en bolívares y mira al instante cuánto es en
         <b class="accent-merchant">dólares</b> y en <b class="accent-euro">euros</b>.
@@ -248,7 +248,7 @@
     </details>
 
     <footer class="colophon">
-      <p><b>Calcudolar</b> · Herramienta de referencia, no asesoría financiera.</p>
+      <p><b>Tasazo</b> · Herramienta de referencia, no asesoría financiera.</p>
       <p>
         Tasas vía <a href="https://ve.dolarapi.com" target="_blank" rel="noopener">ve.dolarapi.com</a>,
         que replica la publicación oficial del

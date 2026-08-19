@@ -27,11 +27,11 @@ export const REFRESH_INTERVAL_MS = 10 * 60 * 1000;
 export const STALE_AFTER_MS = 45 * 60 * 1000;
 
 export const STORAGE_KEYS = {
-  preferences: 'calcudolar.preferences',
-  ratesCache: 'calcudolar.rates',
+  preferences: 'tasazo.preferences',
+  ratesCache: 'tasazo.rates',
   // Also read by the inline script in index.html, which applies the stored
   // theme before first paint. Keep the two in step.
-  theme: 'calcudolar.theme',
+  theme: 'tasazo.theme',
 };
 
 export const THEMES = { light: 'light', dark: 'dark' };
