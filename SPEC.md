@@ -186,7 +186,9 @@ Both are ordinary disclosure elements, so they work without JavaScript, are keyb
 
 Collapsed content is still rendered and kept current; disclosure governs visibility, never correctness.
 
-**UI-10 · Theme.** Light and dark, with three states rather than two: light, dark, and *no stored choice*. Without a choice the page follows the operating system and keeps following it, so a phone that dims at sunset dims the app too; pressing the toggle turns a preference into a decision that outranks the system from then on.
+**UI-10 · Theme.** Light is the default and does not follow the operating system: a calculator read in daylight at a till should look the same whatever the phone happens to be set to. Dark is available on request through the toggle, and the request is remembered.
+
+The dark palette is neutral black. Colour in the background - a tinted ground, coloured backdrop glows - casts over the whole page and reads as a hue rather than as dark; the accents carry the identity instead.
 
 A stored choice is applied before the first paint, so no load shows a frame of the wrong palette.
 
