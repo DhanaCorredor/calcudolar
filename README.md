@@ -60,6 +60,9 @@ Calcudolar answers it in one step. Type the bolívar amount and read it in dolla
 - **Rates that fetch themselves.** Official and parallel rates load on open and refresh every ten minutes, on tab focus and on regaining connectivity.
 - **Works offline.** The last successful snapshot is cached and clearly flagged once stale.
 - **Progressive disclosure.** Two collapsed groups hold everything beyond the basic question: comparing against a shop's own rate, and editing rates by hand.
+- **Light and dark.** Light by default whatever the device prefers; dark is one tap away and the choice sticks.
+- **Built for a phone at a till.** Mobile-first, 44 px targets, inputs that never trigger iOS zoom, and a layout that respects the safe area.
+- **Accessible.** The gauge announces its reading, results and status are live regions, and `prefers-reduced-motion` switches every animation off.
 - **Remembers your session**, and lets you switch that off.
 
 ## The optional half: is this shop overcharging?
@@ -132,7 +135,7 @@ Things a reader might want to know without reading the diff:
 - **The specification is the source of truth.** [`SPEC.md`](SPEC.md) carries numbered requirements (`CALC-2`, `RATE-6`, `UI-9`…), and every commit that changes behaviour names the one it touches. It was written retroactively over a working prototype, which is what exposed the three defects listed in its §8 — lenient number parsing, a gauge with no text alternative, and reconnection ignoring the refresh switch.
 - **Colour never appears in JavaScript.** The renderer writes a *tone* — `good`, `warn`, `bad`, `critical`, `bargain` — and one block of CSS decides what a tone looks like. That is the whole reason a second theme cost nothing but variables.
 - **The domain layer knows nothing about the browser.** `calculator.js` and `format.js` are unaware of the DOM, the network and the clock, so they are tested in plain Node with no framework and no shim.
-- **Every gap is written down.** `GAP-1` … `GAP-5` in the specification record what is knowingly unfinished, each with a proposal. Two have since been closed by the work that followed.
+- **Every gap is written down.** §8 of the specification records what is knowingly unfinished, each with a proposal. Identifiers are stable: a gap that gets closed stays listed as closed rather than being renumbered away.
 
 ## Getting started
 
@@ -140,7 +143,7 @@ Requires Node 20+ and [pnpm](https://pnpm.io) 10+. The version is pinned in `pac
 
 ```bash
 corepack enable
-pnpm install         # no dependencies to fetch; this just verifies the toolchain
+pnpm install         # jsdom, for the tests — the app itself ships nothing
 ```
 
 ES modules are served over HTTP, so opening the file directly will not work. Any static server does:
@@ -156,19 +159,25 @@ Then open the address it prints.
 ### Tests
 
 ```bash
-pnpm test            # node --test, no dependencies
+pnpm test            # node --test — 73 tests, no test framework
 pnpm test:watch
 ```
 
+Unit tests run in plain Node. The DOM suites boot the real `index.html` in
+jsdom, one application instance per file.
+
 ### Deploying
 
-It is a static site — publish the folder as it stands. For GitHub Pages: **Settings → Pages → Deploy from a branch → `main` / `root`**.
+A static site with no build step: publish the folder as it stands. The live
+demo runs on [Vercel](https://vercel.com), which needs no configuration —
+point it at the repository and it serves the root. GitHub Pages, Netlify or any
+static host work the same way.
 
-## Development
+## Contributing
 
-The [specification](SPEC.md) is the source of truth: behaviour changes are written there first, and commits reference the requirement they affect (`CALC-2`, `RATE-6`, …).
+Behaviour changes are written into [`SPEC.md`](SPEC.md) before the code, and the commit names the requirement it touches.
 
-Work happens on short-lived branches off `main` — `feat/*`, `fix/*`, `docs/*` — one pull request each, with commits kept atomic.
+Work happens on short-lived branches off `main` — `feat/*`, `fix/*`, `refactor/*`, `docs/*`, `test/*`, `ci/*` — one pull request each, commits kept atomic, Conventional Commits throughout. CI runs the suite on Node 20 and 24 for every pull request.
 
 ## Licence
 

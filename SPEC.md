@@ -279,9 +279,11 @@ and the rest of the interface stays usable.
 
 ## 8. Known gaps
 
-Writing this specification after the fact exposed behaviour that existed by accident of implementation rather than by decision. Three were corrected while restructuring the project — lenient parsing, a missing text alternative on the gauge, and reconnection ignoring the refresh switch. These remain:
+Writing this specification after the fact exposed behaviour that existed by accident of implementation rather than by decision. Three were corrected while restructuring the project — lenient parsing, a missing text alternative on the gauge, and reconnection ignoring the refresh switch.
 
-**GAP-2b · Merchant euros still need the official pair.** Every reference now carries its own euro rate, so the euro column survives offline (this closed the former `GAP-1`). One derivation remains: the merchant's rate is quoted in dollars alone, so its euro equivalent comes from the official cross. Clearing the official euro field therefore removes the merchant's euro figure while leaving its dollar figure intact — correct, but unexplained on screen.
+Identifiers here are stable: a gap that is closed stays listed as closed rather than being renumbered away, and a new one takes the next free number.
+
+### Open
 
 **GAP-2 · One verdict for every bargain.** −1 % and −40 % read identically. The alarm scale is graduated; the relief scale is not.
 
@@ -289,7 +291,13 @@ Writing this specification after the fact exposed behaviour that existed by acci
 
 **GAP-4 · No defence against typos.** Entering `70` instead of `700` yields a thousand-percent overcharge and a catastrophic verdict, with nothing suggesting the input may be wrong.
 
-**GAP-5 · No browser-level tests.** The DOM is now covered by suites that boot the real application in jsdom, which catches wiring, rendering and state. What no test sees is how any of it *looks*: layout, contrast and motion are still verified by eye.
+**GAP-5 · No visual regression.** The DOM is covered by suites that boot the real application in jsdom, which catches wiring, rendering and state. What no test sees is how any of it *looks*: layout, contrast and motion are still verified by eye.
+
+**GAP-6 · Merchant euros depend on the official pair.** Every reference carries its own euro rate, but the merchant's is quoted in dollars alone, so its euro equivalent still comes from the official cross. Clearing the official euro field therefore removes the merchant's euro figure while leaving its dollar figure intact — correct, but unexplained on screen.
+
+### Closed
+
+**GAP-1 · No euros on a first offline run.** ~~The cross rate depended on BCV data, so a first run with no network and hand-typed rates lost the euro column.~~ Closed by giving every reference its own euro rate (`CALC-4`).
 
 ---
 
