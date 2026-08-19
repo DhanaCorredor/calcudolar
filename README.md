@@ -60,7 +60,7 @@ The interface is in Venezuelan Spanish, because that is who uses it. Everything 
 
 ## Architecture
 
-No framework, no bundler, no dependencies. Plain ES modules, split by responsibility so the domain logic can be tested in Node without a browser:
+No framework, no bundler and no runtime dependencies — jsdom, used only by the tests, is the single devDependency. Plain ES modules, split by responsibility so the domain logic can be tested in Node without a browser:
 
 ```text
 index.html          markup and element hooks
@@ -75,11 +75,16 @@ src/
   ui.js             all DOM rendering, including the SVG gauge
   main.js           state, event wiring, refresh cycle
 tests/
-  calculator.test.js
-  format.test.js
+  calculator.test.js       pure logic
+  format.test.js           parsing and formatting
+  dom/                     the real app booted in jsdom
+    conversion.test.js
+    overcharge.test.js
+    cold-start.test.js
+    restored-state.test.js
 ```
 
-The dependency flow runs one way: `main` orchestrates, `ui` only draws, `calculator` and `format` know nothing about the DOM, the network or the clock. That is what makes 38 unit tests possible with no test framework and no DOM shim.
+The dependency flow runs one way: `main` orchestrates, `ui` only draws, `calculator` and `format` know nothing about the DOM, the network or the clock. That is what makes the unit tests possible with no test framework at all. The DOM suites sit on top, booting the real `main.js` against the real `index.html` so the wiring is covered too — 73 tests in all.
 
 ### Where the rates come from
 
