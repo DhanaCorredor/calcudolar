@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <a href="https://tasazo.vercel.app"><strong>Live demo →</strong></a>
+  <a href="https://calcudolar-six.vercel.app"><strong>Live demo →</strong></a>
 </p>
 
 <p align="center">
@@ -25,7 +25,7 @@
 </p>
 
 <p align="center">
-  <a href="https://tasazo.vercel.app">Demo</a> ·
+  <a href="https://calcudolar-six.vercel.app">Demo</a> ·
   <a href="SPEC.md">Specification</a> ·
   <a href="#architecture">Architecture</a> ·
   <a href="#getting-started">Getting started</a>
