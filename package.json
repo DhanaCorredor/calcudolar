@@ -1,0 +1,24 @@
+{
+  "name": "calcudolar",
+  "version": "1.0.0",
+  "description": "Works out how much a bolivar charge really costs in dollars and euros, and how far the merchant's rate strays from the official one.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "npx --yes serve .",
+    "test": "node --test",
+    "test:watch": "node --test --watch"
+  },
+  "keywords": [
+    "exchange-rate",
+    "venezuela",
+    "bcv",
+    "calculator",
+    "vanilla-js"
+  ],
+  "author": "DhanaCorredor",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  }
+}
