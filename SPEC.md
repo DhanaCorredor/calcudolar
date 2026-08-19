@@ -163,7 +163,13 @@ The humour is functional rather than decorative: a percentage gets read, a verdi
 
 **UI-6 · Output formatting.** `es-VE` locale. Money to two decimals; rates to between two and four, so the BCV's published precision is not truncated; percentages to one.
 
-**UI-7 · Responsiveness.** Two columns collapsing to one on narrow screens, with no horizontal scrolling at any width. `prefers-reduced-motion` is honoured.
+**UI-7 · Mobile-first.** The phone is the design, not a fallback. Every base style targets a narrow screen and the breakpoints only ever add; there is no horizontal scrolling at any width. Specifically:
+
+- Interactive targets are at least 44 px in their smallest dimension. Where a control is deliberately small, its hit area is enlarged without changing its appearance.
+- Text inputs never fall below 16 px, because iOS Safari zooms the viewport on focus for anything smaller and does not zoom back out.
+- Layout respects `env(safe-area-inset-*)` so nothing lands under a home indicator.
+- Decorative work is cheapest on the smallest screens: blur radii and animated backdrops scale up with the viewport rather than down.
+- `prefers-reduced-motion` is honoured.
 
 **UI-8 · Accessibility.** The gauge carries a text alternative that includes the current reading and its reference. The verdict and the status strip are live regions, so a screen reader hears results change without the user hunting for them.
 
