@@ -36,6 +36,9 @@ export const elements = {
   autoRefreshToggle: byId('autoRefreshToggle'),
   referenceModes: byId('referenceModes'),
 
+  merchantDisclosure: byId('merchantDisclosure'),
+  ratesDisclosure: byId('ratesDisclosure'),
+
   gauge: byId('gauge'),
   gaugeTrack: byId('gaugeTrack'),
   gaugeZones: byId('gaugeZones'),

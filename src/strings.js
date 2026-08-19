@@ -51,15 +51,15 @@ export const strings = {
   },
 
   rateLabels: {
-    merchant: 'Según el comercio',
-    official: 'Según tasa BCV',
-    parallel: 'Según tasa paralela',
+    merchant: 'A la tasa del comercio',
+    official: 'A tasa BCV',
+    parallel: 'A tasa paralela',
   },
 
   rateCaptions: {
     merchant: 'Lo que te están cobrando',
-    official: 'Referencia oficial',
-    parallel: 'Referencia de mercado',
+    official: 'Tasa oficial',
+    parallel: 'Tasa del mercado',
   },
 
   referenceNames: {
@@ -113,7 +113,7 @@ export const strings = {
     manualHint: 'Tasa escrita por ti. Click para volver a la automática.',
   },
 
-  emptyResults: 'Aún no hay nada que calcular… todavía te salvas.',
+  emptyResults: 'Escribe un monto y te digo cuánto es.',
 
   time: {
     justNow: 'hace segundos',

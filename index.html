@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#07070f">
-  <title>Calcudolar · ¿Cuánto te están clavando?</title>
-  <meta name="description" content="Calcula cuánto pagas en dólares y euros por un cobro en bolívares, y cuánto sobreprecio te aplican frente al BCV y al paralelo.">
+  <title>Calcudolar · Bolívares a dólares y euros</title>
+  <meta name="description" content="Escribe un monto en bolívares y mira al instante cuánto es en dólares y en euros, con la tasa del BCV y la del paralelo actualizadas solas.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,129 +18,70 @@
 
   <div class="layout">
     <header class="masthead">
-      <p class="pill"><span class="pill-dot" aria-hidden="true"></span> Detector de sobreprecio cambiario</p>
       <h1>Calcudolar</h1>
       <p class="tagline">
-        Pon el monto en bolívares. Las tasas del <b class="accent-official">BCV</b> y del
-        <b class="accent-parallel">paralelo</b> se actualizan solas — tú solo escribes a cuánto
-        te está cobrando el comercio.
+        Escribe cuánto te van a cobrar en bolívares y mira al instante cuánto es en
+        <b class="accent-merchant">dólares</b> y en <b class="accent-euro">euros</b>.
       </p>
     </header>
 
-    <div class="columns">
-      <!-- ───────────────── Entrada de datos ───────────────── -->
-      <section class="column" aria-label="Datos del cobro">
-        <article class="panel">
-          <div class="panel-head">
-            <h2 class="panel-title"><span aria-hidden="true">🧾</span> El cobro</h2>
-            <button type="button" class="button-ghost" id="clearButton">🧹 Limpiar datos</button>
+    <!-- ───────────────── El monto ───────────────── -->
+    <article class="panel">
+      <div class="panel-head">
+        <h2 class="panel-title" id="amountLabel"><span aria-hidden="true">💸</span> Monto en bolívares</h2>
+        <button type="button" class="button-ghost button-compact" id="clearButton">🧹 Limpiar</button>
+      </div>
+
+      <div class="input-shell">
+        <span class="input-prefix input-prefix-lead" aria-hidden="true">Bs.</span>
+        <input type="text" id="amountInput" class="input input-lead" inputmode="decimal"
+               placeholder="0,00" autocomplete="off" enterkeyhint="done"
+               aria-labelledby="amountLabel">
+      </div>
+    </article>
+
+    <!-- ───────────────── La conversión ───────────────── -->
+    <article class="panel">
+      <h2 class="panel-title"><span aria-hidden="true">💱</span> Eso es</h2>
+
+      <div class="results" id="resultsList" role="status" aria-live="polite">
+        <p class="empty">Escribe un monto y te digo cuánto es.</p>
+      </div>
+
+      <div class="status" id="statusBar" role="status" aria-live="polite">
+        <span class="status-pip" aria-hidden="true"></span>
+        <div class="status-body">
+          <b id="statusTitle">Consultando tasas…</b>
+          <span class="status-detail" id="statusDetail">Conectando con la fuente</span>
+        </div>
+        <button type="button" class="button-ghost button-compact" id="refreshButton">
+          <span class="spinner" aria-hidden="true">↻</span> Actualizar
+        </button>
+      </div>
+    </article>
+
+    <!-- ───────────────── Opcional: comparar con el comercio ───────────────── -->
+    <details class="disclosure" id="merchantDisclosure">
+      <summary class="disclosure-summary">
+        <span class="disclosure-icon" aria-hidden="true">▸</span>
+        ¿Te cobran a otra tasa?
+      </summary>
+
+      <div class="disclosure-body">
+        <div class="field">
+          <label class="field-label" for="merchantRateInput">
+            <span class="field-name">Tasa del comercio</span>
+            <span class="chip chip-merchant">Bs. por 1 $</span>
+          </label>
+          <div class="input-shell">
+            <span class="input-prefix" aria-hidden="true">Bs.</span>
+            <input type="text" id="merchantRateInput" class="input" inputmode="decimal"
+                   placeholder="0,00" autocomplete="off">
           </div>
+          <p class="note">Si te cobran a una tasa más baja que la referencia, pagas más divisas por lo mismo.</p>
+        </div>
 
-          <div class="field">
-            <label class="field-label" for="amountInput">
-              <span class="field-name">Monto a pagar</span>
-              <span class="chip">Bolívares</span>
-            </label>
-            <div class="input-shell">
-              <span class="input-prefix input-prefix-lead" aria-hidden="true">Bs.</span>
-              <input type="text" id="amountInput" class="input input-lead" inputmode="decimal"
-                     placeholder="0,00" autocomplete="off" enterkeyhint="done">
-            </div>
-          </div>
-        </article>
-
-        <article class="panel">
-          <h2 class="panel-title">
-            <span aria-hidden="true">📊</span> Las tasas
-            <span class="panel-note">Bs. por 1 $</span>
-          </h2>
-
-          <div class="status" id="statusBar" role="status" aria-live="polite">
-            <span class="status-pip" aria-hidden="true"></span>
-            <div class="status-body">
-              <b id="statusTitle">Consultando tasas…</b>
-              <span class="status-detail" id="statusDetail">Conectando con la fuente</span>
-            </div>
-            <button type="button" class="button-ghost button-compact" id="refreshButton">
-              <span class="spinner" aria-hidden="true">↻</span> Actualizar
-            </button>
-          </div>
-
-          <div class="field">
-            <label class="field-label" for="merchantRateInput">
-              <span class="field-name">Tasa del comercio</span>
-              <span class="chip chip-merchant">Te cobran a</span>
-            </label>
-            <div class="input-shell">
-              <span class="input-prefix" aria-hidden="true">Bs.</span>
-              <input type="text" id="merchantRateInput" class="input" inputmode="decimal"
-                     placeholder="0,00" autocomplete="off">
-            </div>
-          </div>
-
-          <div class="field-pair">
-            <div class="field">
-              <label class="field-label" for="officialRateInput">
-                <span class="field-name">Tasa BCV <span class="chip chip-official">Oficial</span></span>
-                <button type="button" class="mode-toggle is-auto" data-rate="official"
-                        aria-pressed="true">auto</button>
-              </label>
-              <div class="input-shell">
-                <span class="input-prefix" aria-hidden="true">Bs.</span>
-                <input type="text" id="officialRateInput" class="input is-auto" inputmode="decimal"
-                       placeholder="0,00" autocomplete="off">
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="field-label" for="parallelRateInput">
-                <span class="field-name">Tasa paralela <span class="chip chip-parallel">Monitor</span></span>
-                <button type="button" class="mode-toggle is-auto" data-rate="parallel"
-                        aria-pressed="true">auto</button>
-              </label>
-              <div class="input-shell">
-                <span class="input-prefix" aria-hidden="true">Bs.</span>
-                <input type="text" id="parallelRateInput" class="input is-auto" inputmode="decimal"
-                       placeholder="0,00" autocomplete="off">
-              </div>
-            </div>
-          </div>
-
-          <p class="note" id="euroNote">Tasas del euro: pendientes de la primera consulta.</p>
-
-          <div class="toggle-row">
-            <label class="toggle">
-              <input type="checkbox" id="persistToggle" checked>
-              <span class="toggle-track" aria-hidden="true"></span>
-              Recordar mis datos
-            </label>
-            <label class="toggle">
-              <input type="checkbox" id="autoRefreshToggle" checked>
-              <span class="toggle-track" aria-hidden="true"></span>
-              Refrescar cada 10 min
-            </label>
-          </div>
-        </article>
-
-        <article class="panel">
-          <h2 class="panel-title"><span aria-hidden="true">🎯</span> Referencia del medidor</h2>
-          <div class="segmented" id="referenceModes" role="group" aria-label="Referencia del medidor">
-            <button type="button" data-mode="official" class="is-selected" aria-pressed="true">BCV</button>
-            <button type="button" data-mode="parallel" aria-pressed="false">Paralela</button>
-            <button type="button" data-mode="worst" aria-pressed="false">Peor caso</button>
-          </div>
-          <p class="note">
-            El medidor compara la tasa del comercio contra la referencia elegida.
-            <b>Peor caso</b> usa la que más te perjudica.
-          </p>
-        </article>
-      </section>
-
-      <!-- ───────────────── Resultados ───────────────── -->
-      <section class="column" aria-label="Resultados">
-        <article class="panel panel-meter">
-          <h2 class="panel-title panel-title-centered"><span aria-hidden="true">💔</span> Infartómetro</h2>
-
+        <div class="meter">
           <div class="gauge-frame">
             <svg class="gauge" id="gauge" viewBox="0 0 300 185" role="img"
                  aria-label="Medidor de sobreprecio sin datos suficientes">
@@ -175,40 +116,88 @@
             <p class="verdict-title" id="verdictTitle">Esperando datos…</p>
             <p class="verdict-detail" id="verdictDetail">Escribe el monto y la tasa del comercio.</p>
           </div>
-        </article>
+        </div>
 
-        <article class="panel">
-          <h2 class="panel-title"><span aria-hidden="true">💵</span> Lo que pagas según cada tasa</h2>
-          <div class="results" id="resultsList">
-            <p class="empty">Aún no hay nada que calcular… todavía te salvas.</p>
+        <div class="comparison">
+          <div class="comparison-card" data-reference="official">
+            <p class="comparison-head">vs. Oficial BCV</p>
+            <p class="comparison-usd">—</p>
+            <p class="comparison-eur"></p>
+            <p class="comparison-percent">—</p>
+            <div class="meter-bar"><span></span></div>
           </div>
-        </article>
+          <div class="comparison-card" data-reference="parallel">
+            <p class="comparison-head">vs. Paralela</p>
+            <p class="comparison-usd">—</p>
+            <p class="comparison-eur"></p>
+            <p class="comparison-percent">—</p>
+            <div class="meter-bar"><span></span></div>
+          </div>
+        </div>
 
-        <article class="panel">
-          <h2 class="panel-title"><span aria-hidden="true">⚖️</span> Comparativa contra el comercio</h2>
-          <div class="comparison">
-            <div class="comparison-card" data-reference="official">
-              <p class="comparison-head">vs. Oficial BCV</p>
-              <p class="comparison-usd">—</p>
-              <p class="comparison-eur"></p>
-              <p class="comparison-percent">—</p>
-              <div class="meter-bar"><span></span></div>
-            </div>
-            <div class="comparison-card" data-reference="parallel">
-              <p class="comparison-head">vs. Paralela</p>
-              <p class="comparison-usd">—</p>
-              <p class="comparison-eur"></p>
-              <p class="comparison-percent">—</p>
-              <div class="meter-bar"><span></span></div>
+        <div class="field">
+          <p class="field-label"><span class="field-name">Comparar contra</span></p>
+          <div class="segmented" id="referenceModes" role="group" aria-label="Referencia del medidor">
+            <button type="button" data-mode="official" class="is-selected" aria-pressed="true">BCV</button>
+            <button type="button" data-mode="parallel" aria-pressed="false">Paralela</button>
+            <button type="button" data-mode="worst" aria-pressed="false">Peor caso</button>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- ───────────────── Opcional: tasas a mano ───────────────── -->
+    <details class="disclosure" id="ratesDisclosure">
+      <summary class="disclosure-summary">
+        <span class="disclosure-icon" aria-hidden="true">▸</span>
+        Ajustar las tasas a mano
+      </summary>
+
+      <div class="disclosure-body">
+        <div class="field-pair">
+          <div class="field">
+            <label class="field-label" for="officialRateInput">
+              <span class="field-name">Tasa BCV <span class="chip chip-official">Oficial</span></span>
+              <button type="button" class="mode-toggle is-auto" data-rate="official"
+                      aria-pressed="true">auto</button>
+            </label>
+            <div class="input-shell">
+              <span class="input-prefix" aria-hidden="true">Bs.</span>
+              <input type="text" id="officialRateInput" class="input is-auto" inputmode="decimal"
+                     placeholder="0,00" autocomplete="off">
             </div>
           </div>
-          <p class="note">
-            Cuánto de más (o de menos) terminas pagando por lo mismo, en
-            <b class="accent-merchant">$</b> y en <b class="accent-euro">€</b>.
-          </p>
-        </article>
-      </section>
-    </div>
+
+          <div class="field">
+            <label class="field-label" for="parallelRateInput">
+              <span class="field-name">Tasa paralela <span class="chip chip-parallel">Monitor</span></span>
+              <button type="button" class="mode-toggle is-auto" data-rate="parallel"
+                      aria-pressed="true">auto</button>
+            </label>
+            <div class="input-shell">
+              <span class="input-prefix" aria-hidden="true">Bs.</span>
+              <input type="text" id="parallelRateInput" class="input is-auto" inputmode="decimal"
+                     placeholder="0,00" autocomplete="off">
+            </div>
+          </div>
+        </div>
+
+        <p class="note" id="euroNote">Tasas del euro: pendientes de la primera consulta.</p>
+
+        <div class="toggle-row">
+          <label class="toggle">
+            <input type="checkbox" id="persistToggle" checked>
+            <span class="toggle-track" aria-hidden="true"></span>
+            Recordar mis datos
+          </label>
+          <label class="toggle">
+            <input type="checkbox" id="autoRefreshToggle" checked>
+            <span class="toggle-track" aria-hidden="true"></span>
+            Refrescar cada 10 min
+          </label>
+        </div>
+      </div>
+    </details>
 
     <footer class="colophon">
       <p><b>Calcudolar</b> · Herramienta de referencia, no asesoría financiera.</p>

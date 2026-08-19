@@ -1,6 +1,6 @@
 # Specification · Calcudolar
 
-**Version:** 1.0
+**Version:** 1.1
 **Status:** current
 **Last revised:** 2026-08-19
 
@@ -12,17 +12,19 @@ Requirements carry identifiers (`CALC-1`, `RATE-3`, …) so that tests, issues a
 
 ## 1. Purpose
 
-Venezuelan prices are quoted in foreign currency but charged in bolívares, and every merchant applies its own conversion rate. When that rate sits below the market reference, the customer hands over more foreign currency for the same goods — and nothing at the till makes that visible.
+Venezuelan prices are quoted in foreign currency but charged in bolívares. Calcudolar answers the question that comes up several times a day: **how much is this in dollars and euros?**
 
-Calcudolar makes it visible **before you pay**. Given the bolívar amount and the merchant's rate, it answers what that comes to in dollars and euros, measured against the official BCV rate and the parallel market.
+Type the bolívar amount and read the conversion at the official BCV rate and at the parallel rate, in both currencies, without touching anything else. The rates fetch themselves.
+
+A second, optional question follows from the first: when a shop applies its own rate, how far is it from the reference? That comparison is available on demand but stays out of the way, because it is not why most people open the app.
 
 ### 1.1 Who it is for
 
-Someone standing at a counter with a phone and thirty seconds to decide. Three design constraints follow:
+Someone with a phone and ten seconds. Three design constraints follow:
 
-- **Minimal input.** The only things worth typing are the amount and the merchant's rate. Reference rates fetch themselves.
+- **One input.** Typing the amount is the whole interaction. Rates fetch themselves; nothing else is required to get an answer.
 - **Immediate answer.** No calculate button; results follow every keystroke.
-- **A verdict readable at a glance.** Knowing whether a charge is normal or abusive matters more than the exact figure.
+- **Progressive disclosure.** Everything beyond "what is this in dollars" — the merchant's rate, the overcharge gauge, editing rates by hand — is collapsed until asked for.
 
 The interface is written in Venezuelan Spanish because that is who uses it. Everything else — identifiers, comments, commits, documentation — is in English, so the codebase stays legible to a wider audience. All user-facing copy is isolated in `src/strings.js`.
 
@@ -165,6 +167,17 @@ The humour is functional rather than decorative: a percentage gets read, a verdi
 
 **UI-8 · Accessibility.** The gauge carries a text alternative that includes the current reading and its reference. The verdict and the status strip are live regions, so a screen reader hears results change without the user hunting for them.
 
+**UI-9 · Progressive disclosure.** The page opens on the amount field and the conversion, and nothing else competes with them. Two groups sit collapsed beneath:
+
+| Group | Contains |
+|---|---|
+| *¿Te cobran a otra tasa?* | merchant rate, gauge, verdict, comparison cards, reference selector |
+| *Ajustar las tasas a mano* | the reference rate fields and their auto/manual toggles |
+
+Both are ordinary disclosure elements, so they work without JavaScript, are keyboard operable and are searchable by the browser's find-in-page. A group reopens on load when it holds a value the user left behind — a merchant rate typed earlier reopens its group, so restored state is never hidden from the person who entered it.
+
+Collapsed content is still rendered and kept current; disclosure governs visibility, never correctness.
+
 ---
 
 ## 6. Persistence
@@ -215,6 +228,15 @@ worst-case mode reads `25.9 %` and names the parallel rate.
 **AC-7 · Reading without an amount.**
 Given a merchant rate and a reference rate but no amount,
 then the gauge and both percentages are shown, and the money figures read `—`.
+
+**AC-7b · Conversion is the whole interaction.**
+Given a freshly loaded page and an amount of `10,000` Bs,
+then both conversions are shown without any further input,
+and both disclosure groups remain closed.
+
+**AC-7c · Restored state reopens its group.**
+Given a merchant rate saved from an earlier session,
+when the page loads, its disclosure group is open.
 
 **AC-8 · Taking manual control.**
 Given an official rate in auto mode, when the user types in the field,
