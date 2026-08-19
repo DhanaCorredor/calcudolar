@@ -1,10 +1,10 @@
 <h1 align="center">💸 Calcudolar</h1>
 
 <p align="center">
-  <em>How much is that bolívar charge really costing you?</em><br>
-  A no-dependency web calculator that converts a Venezuelan bolívar charge into
-  dollars and euros, and measures how far the merchant's rate strays from the
-  official one.
+  <em>How much is that in dollars?</em><br>
+  A no-dependency web calculator that turns a Venezuelan bolívar amount into
+  dollars and euros at the official and parallel rates, which it fetches on its
+  own.
 </p>
 
 <p align="center">
@@ -17,17 +17,23 @@
 
 ## The problem
 
-Venezuelan prices are quoted in foreign currency but charged in bolívares, and every shop applies its own conversion rate. When that rate sits below the market reference, you hand over more foreign currency for the same goods — and nothing at the till tells you so.
+Venezuelan prices are quoted in foreign currency but charged in bolívares, so the same question comes up several times a day: *how much is this actually worth?*
 
-Calcudolar tells you before you pay. Type the amount and the rate you are being charged at; it answers what that comes to in dollars and euros against the official BCV rate and the parallel market, and how much the gap is costing you.
+Calcudolar answers it in one step. Type the bolívar amount and read it in dollars and euros, at both the official BCV rate and the parallel rate. Nothing else to fill in — the rates fetch themselves.
 
 ## Features
 
-- **One amount, two currencies, three rates.** Every conversion side by side: the merchant's, the BCV's and the parallel market's.
-- **Rates that fetch themselves.** Official and parallel rates load on open and refresh every ten minutes, on tab focus and on regaining connectivity. Either can be taken over manually with one click.
-- **The *Infartómetro*.** A gauge that maps the overcharge onto an alarm level, from *"todo legal, respira"* to *"código azul"*.
+- **One input.** Type the amount; both conversions appear in both currencies as you type.
+- **Rates that fetch themselves.** Official and parallel rates load on open and refresh every ten minutes, on tab focus and on regaining connectivity.
 - **Works offline.** The last successful snapshot is cached and clearly flagged once stale.
+- **Progressive disclosure.** Two collapsed groups hold everything beyond the basic question: comparing against a shop's own rate, and editing rates by hand.
 - **Remembers your session**, and lets you switch that off.
+
+## The optional half: is this shop overcharging?
+
+Shops apply their own rate, and a rate *below* the reference means you hand over more currency for the same goods. Open *"¿Te cobran a otra tasa?"*, type the rate you are being charged, and the **Infartómetro** maps the gap onto an alarm level — from *"todo legal, respira"* to *"código azul"*.
+
+It stays collapsed because it is not why most people open the app.
 
 ## The rule it all rests on
 
