@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#07070f">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f5f6fb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#07070f" media="(prefers-color-scheme: dark)">
   <title>Calcudolar · Bolívares a dólares y euros</title>
   <meta name="description" content="Escribe un monto en bolívares y mira al instante cuánto es en dólares y en euros, con la tasa del BCV y la del paralelo actualizadas solas.">
 
@@ -12,12 +14,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💸</text></svg>">
+
+  <!--
+    Applies a stored theme before the first paint. Deferring this to the module
+    would show one frame of the wrong palette on every load. Kept to one line
+    and mirrored by STORAGE_KEYS.theme in src/config.js.
+  -->
+  <script>
+    try {
+      const saved = JSON.parse(localStorage.getItem('calcudolar.theme'));
+      if (saved === 'light' || saved === 'dark') document.documentElement.dataset.theme = saved;
+    } catch (error) { /* storage unavailable: the system preference decides */ }
+  </script>
 </head>
 <body>
   <div class="backdrop-grid" aria-hidden="true"></div>
 
   <div class="layout">
     <header class="masthead">
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Cambiar el tema">🌙</button>
       <h1>Calcudolar</h1>
       <p class="tagline">
         Escribe cuánto te van a cobrar en bolívares y mira al instante cuánto es en
@@ -94,13 +109,13 @@
                   </feMerge>
                 </filter>
               </defs>
-              <path id="gaugeTrack" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="22" stroke-linecap="round"/>
+              <path id="gaugeTrack" class="gauge-track" fill="none" stroke-width="22" stroke-linecap="round"/>
               <g id="gaugeZones" fill="none" stroke-width="16" opacity=".85"></g>
-              <g id="gaugeTicks" stroke="rgba(255,255,255,.28)" stroke-width="1.5"></g>
+              <g id="gaugeTicks" class="gauge-ticks" stroke-width="1.5"></g>
               <g id="gaugeNeedle" class="gauge-needle">
-                <line x1="150" y1="150" x2="48" y2="150" stroke="#fff" stroke-width="4"
+                <line x1="150" y1="150" x2="48" y2="150" stroke-width="4"
                       stroke-linecap="round" filter="url(#needleGlow)"/>
-                <circle cx="150" cy="150" r="9" fill="#0b0b16" stroke="#fff" stroke-width="3"/>
+                <circle cx="150" cy="150" r="9" stroke-width="3"/>
               </g>
               <text x="24" y="176" class="gauge-scale">0%</text>
               <text x="150" y="176" class="gauge-scale" text-anchor="middle">30%</text>

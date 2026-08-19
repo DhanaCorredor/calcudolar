@@ -115,6 +115,13 @@ export const strings = {
 
   emptyResults: 'Escribe un monto y te digo cuánto es.',
 
+  theme: {
+    toLight: 'Cambiar a tema claro',
+    toDark: 'Cambiar a tema oscuro',
+    lightIcon: '☀️',
+    darkIcon: '🌙',
+  },
+
   time: {
     justNow: 'hace segundos',
     minutes: (n) => `hace ${n} min`,

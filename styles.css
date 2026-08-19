@@ -9,12 +9,108 @@
    ========================================================================== */
 
 /* --------------------------------------------------------- Design tokens */
+/*
+ * Light is the base; dark arrives through the system preference or an explicit
+ * choice. Only the palette changes between them — every rule below this block
+ * is written once and reads its colours from these variables.
+ */
 :root {
+  --bg: #f5f6fb;
+  --surface: rgba(255, 255, 255, 0.72);
+  --border: rgba(20, 22, 42, 0.09);
+  --border-strong: rgba(20, 22, 42, 0.16);
+  --well: rgba(20, 22, 42, 0.035);
+  --wash: rgba(20, 22, 42, 0.05);
+  --glow: rgba(20, 22, 42, 0.12);
+
+  --text: #14162a;
+  --text-muted: #5c6180;
+  --text-faint: #8b90a8;
+
+  /* Darkened against a light ground: the neon values fail contrast on white. */
+  --merchant: #0086a8;
+  --official: #0e8f59;
+  --parallel: #b3660a;
+  --euro: #6a3fc7;
+
+  --good: #0e8f59;
+  --warn: #9a6c07;
+  --bad: #b3660a;
+  --critical: #d10f42;
+  --bargain: #0086a8;
+
+  --backdrop-warm: rgba(255, 46, 99, 0.22);
+  --backdrop-cool: rgba(0, 134, 168, 0.18);
+  --grid-line: rgba(20, 22, 42, 0.05);
+  --panel-shadow: 0 18px 40px -28px rgba(20, 22, 42, 0.55);
+  --toast-bg: rgba(255, 255, 255, 0.94);
+  --needle: #14162a;
+  --needle-hub: #ffffff;
+  --input-bg: rgba(255, 255, 255, 0.9);
+  --input-bg-focus: #ffffff;
+  --track-bg: rgba(20, 22, 42, 0.06);
+
+  --radius-lg: 20px;
+  --radius-md: 15px;
+  --radius-sm: 12px;
+
+  /* Smallest comfortable target for a thumb. */
+  --tap: 44px;
+
+  --font-sans: 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Space Grotesk', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+}
+
+/*
+ * The dark palette, declared once and pointed at twice: by the system
+ * preference where no choice has been stored, and by an explicit choice.
+ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #07070f;
+    --surface: rgba(255, 255, 255, 0.045);
+    --border: rgba(255, 255, 255, 0.1);
+    --border-strong: rgba(255, 255, 255, 0.18);
+    --well: rgba(0, 0, 0, 0.32);
+    --wash: rgba(255, 255, 255, 0.05);
+    --glow: rgba(255, 255, 255, 0.16);
+
+    --text: #eef1fb;
+    --text-muted: #8e93ad;
+    --text-faint: #5a5f78;
+
+    --merchant: #00e5ff;
+    --official: #22e08a;
+    --parallel: #ff9f1c;
+    --euro: #b18cff;
+
+    --good: #22e08a;
+    --warn: #ffd23f;
+    --bad: #ff9f1c;
+    --critical: #ff2e63;
+    --bargain: #00e5ff;
+
+    --backdrop-warm: rgba(255, 46, 99, 0.33);
+    --backdrop-cool: rgba(0, 229, 255, 0.27);
+    --grid-line: rgba(255, 255, 255, 0.035);
+    --panel-shadow: 0 20px 50px -25px #000;
+    --toast-bg: rgba(20, 20, 32, 0.92);
+    --needle: #ffffff;
+    --needle-hub: #0b0b16;
+    --input-bg: rgba(0, 0, 0, 0.35);
+    --input-bg-focus: rgba(0, 0, 0, 0.5);
+    --track-bg: rgba(0, 0, 0, 0.5);
+  }
+}
+
+:root[data-theme='dark'] {
   --bg: #07070f;
   --surface: rgba(255, 255, 255, 0.045);
   --border: rgba(255, 255, 255, 0.1);
   --border-strong: rgba(255, 255, 255, 0.18);
   --well: rgba(0, 0, 0, 0.32);
+  --wash: rgba(255, 255, 255, 0.05);
+  --glow: rgba(255, 255, 255, 0.16);
 
   --text: #eef1fb;
   --text-muted: #8e93ad;
@@ -29,16 +125,18 @@
   --warn: #ffd23f;
   --bad: #ff9f1c;
   --critical: #ff2e63;
+  --bargain: #00e5ff;
 
-  --radius-lg: 20px;
-  --radius-md: 15px;
-  --radius-sm: 12px;
-
-  /* Smallest comfortable target for a thumb. */
-  --tap: 44px;
-
-  --font-sans: 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'Space Grotesk', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  --backdrop-warm: rgba(255, 46, 99, 0.33);
+  --backdrop-cool: rgba(0, 229, 255, 0.27);
+  --grid-line: rgba(255, 255, 255, 0.035);
+  --panel-shadow: 0 20px 50px -25px #000;
+  --toast-bg: rgba(20, 20, 32, 0.92);
+  --needle: #ffffff;
+  --needle-hub: #0b0b16;
+  --input-bg: rgba(0, 0, 0, 0.35);
+  --input-bg-focus: rgba(0, 0, 0, 0.5);
+  --track-bg: rgba(0, 0, 0, 0.5);
 }
 
 /* ---------------------------------------------------------------- Reset */
@@ -95,12 +193,12 @@ body::after {
 
 body::before {
   inset: -35vmax auto auto -30vmax;
-  background: radial-gradient(circle, #ff2e6355, transparent 65%);
+  background: radial-gradient(circle, var(--backdrop-warm), transparent 65%);
 }
 
 body::after {
   inset: auto -30vmax -35vmax auto;
-  background: radial-gradient(circle, #00e5ff44, transparent 65%);
+  background: radial-gradient(circle, var(--backdrop-cool), transparent 65%);
 }
 
 .backdrop-grid {
@@ -110,8 +208,8 @@ body::after {
   opacity: 0.35;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 38px 38px;
   -webkit-mask-image: radial-gradient(ellipse at 50% 15%, #000 20%, transparent 75%);
   mask-image: radial-gradient(ellipse at 50% 15%, #000 20%, transparent 75%);
@@ -134,8 +232,38 @@ body::after {
 
 /* ------------------------------------------------------------- Masthead */
 .masthead {
+  position: relative;
   margin-bottom: 22px;
   text-align: center;
+}
+
+.theme-toggle {
+  position: absolute;
+  top: -4px;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--tap);
+  height: var(--tap);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: border-color 0.18s, transform 0.18s;
+}
+
+.theme-toggle:hover {
+  border-color: var(--border-strong);
+  transform: scale(1.06);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--merchant);
+  outline-offset: 2px;
 }
 
 .masthead h1 {
@@ -144,7 +272,7 @@ body::after {
   font-weight: 800;
   line-height: 1;
   letter-spacing: -0.03em;
-  background: linear-gradient(100deg, #fff 10%, var(--critical) 45%, var(--merchant) 90%);
+  background: linear-gradient(100deg, var(--text) 10%, var(--critical) 45%, var(--merchant) 90%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -172,7 +300,7 @@ body::after {
   background: var(--surface);
   -webkit-backdrop-filter: blur(18px) saturate(140%);
   backdrop-filter: blur(18px) saturate(140%);
-  box-shadow: 0 20px 50px -25px #000, inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  box-shadow: var(--panel-shadow), inset 0 1px 0 var(--wash);
 }
 
 .panel-head {
@@ -233,7 +361,7 @@ body::after {
 }
 
 .disclosure-summary:hover {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--well);
   color: var(--text);
 }
 
@@ -299,17 +427,17 @@ body::after {
   overflow-wrap: anywhere;
 }
 
-.status.is-live { border-color: #22e08a55; background: #22e08a0e; }
+.status.is-live { border-color: color-mix(in srgb, var(--good) 40%, transparent); background: color-mix(in srgb, var(--good) 8%, transparent); }
 .status.is-live .status-pip {
   background: var(--good);
   box-shadow: 0 0 10px var(--good);
   animation: heartbeat 2.4s infinite;
 }
 
-.status.is-stale { border-color: #ffd23f55; background: #ffd23f0e; }
+.status.is-stale { border-color: color-mix(in srgb, var(--warn) 40%, transparent); background: color-mix(in srgb, var(--warn) 8%, transparent); }
 .status.is-stale .status-pip { background: var(--warn); box-shadow: 0 0 10px var(--warn); }
 
-.status.is-offline { border-color: #ff2e6355; background: #ff2e630e; }
+.status.is-offline { border-color: color-mix(in srgb, var(--critical) 40%, transparent); background: color-mix(in srgb, var(--critical) 8%, transparent); }
 .status.is-offline .status-pip { background: var(--critical); box-shadow: 0 0 10px var(--critical); }
 
 .status.is-loading .spinner {
@@ -375,9 +503,9 @@ body::after {
   white-space: nowrap;
 }
 
-.chip-merchant { color: var(--merchant); border-color: #00e5ff55; background: #00e5ff12; }
-.chip-official { color: var(--official); border-color: #22e08a55; background: #22e08a12; }
-.chip-parallel { color: var(--parallel); border-color: #ff9f1c55; background: #ff9f1c12; }
+.chip-merchant { color: var(--merchant); border-color: color-mix(in srgb, var(--merchant) 40%, transparent); background: color-mix(in srgb, var(--merchant) 9%, transparent); }
+.chip-official { color: var(--official); border-color: color-mix(in srgb, var(--official) 40%, transparent); background: color-mix(in srgb, var(--official) 9%, transparent); }
+.chip-parallel { color: var(--parallel); border-color: color-mix(in srgb, var(--parallel) 40%, transparent); background: color-mix(in srgb, var(--parallel) 9%, transparent); }
 
 .input-shell {
   position: relative;
@@ -406,7 +534,7 @@ body::after {
   border: 1px solid var(--border-strong);
   border-radius: 13px;
   outline: none;
-  background: rgba(0, 0, 0, 0.35);
+  background: var(--input-bg);
   color: var(--text);
   font-family: var(--font-mono);
   /*
@@ -419,14 +547,14 @@ body::after {
 }
 
 .input::placeholder {
-  color: #4d5169;
+  color: var(--text-faint);
   font-weight: 400;
 }
 
 .input:focus {
   border-color: var(--merchant);
-  background: rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 0 3px #00e5ff22, 0 0 22px -6px var(--merchant);
+  background: var(--input-bg-focus);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--merchant) 18%, transparent);
 }
 
 .input-lead {
@@ -436,13 +564,13 @@ body::after {
 }
 
 .input.is-auto {
-  border-color: #22e08a3d;
-  background: rgba(34, 224, 138, 0.05);
+  border-color: color-mix(in srgb, var(--official) 30%, transparent);
+  background: color-mix(in srgb, var(--official) 6%, transparent);
 }
 
 .input.is-invalid {
   border-color: var(--critical);
-  box-shadow: 0 0 0 3px #ff2e6322;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--critical) 18%, transparent);
 }
 
 .input.just-updated {
@@ -450,8 +578,8 @@ body::after {
 }
 
 @keyframes pulse-ring {
-  0% { box-shadow: 0 0 0 0 #22e08a66; }
-  60% { box-shadow: 0 0 0 7px #22e08a00; }
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--official) 45%, transparent); }
+  60% { box-shadow: 0 0 0 7px transparent; }
   100% { box-shadow: none; }
 }
 
@@ -461,7 +589,7 @@ body::after {
   padding: 5px 10px;
   border: 1px solid var(--border-strong);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--wash);
   color: var(--text-muted);
   font-size: 0.62rem;
   font-weight: 700;
@@ -479,8 +607,8 @@ body::after {
 }
 
 .mode-toggle.is-auto {
-  border-color: #22e08a66;
-  background: #22e08a14;
+  border-color: color-mix(in srgb, var(--official) 45%, transparent);
+  background: color-mix(in srgb, var(--official) 10%, transparent);
   color: var(--official);
 }
 
@@ -497,7 +625,7 @@ body::after {
   padding: 10px 16px;
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--wash);
   color: var(--text-muted);
   font-size: 0.82rem;
   font-weight: 600;
@@ -505,8 +633,8 @@ body::after {
 }
 
 .button-ghost:hover:not(:disabled) {
-  border-color: #ff2e6377;
-  background: #ff2e6314;
+  border-color: color-mix(in srgb, var(--critical) 50%, transparent);
+  background: color-mix(in srgb, var(--critical) 10%, transparent);
   color: var(--critical);
 }
 
@@ -517,7 +645,7 @@ body::after {
 
 .status .button-compact:hover:not(:disabled) {
   border-color: var(--border-strong);
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--wash);
   color: var(--text);
 }
 
@@ -533,7 +661,7 @@ body::after {
   padding: 3px;
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
-  background: rgba(0, 0, 0, 0.35);
+  background: var(--track-bg);
 }
 
 .segmented button {
@@ -554,7 +682,7 @@ body::after {
 }
 
 .segmented button.is-selected {
-  background: linear-gradient(135deg, #ffffff1f, #ffffff0d);
+  background: var(--surface);
   box-shadow: inset 0 0 0 1px var(--border-strong);
   color: var(--text);
 }
@@ -591,7 +719,7 @@ body::after {
   height: 22px;
   border: 1px solid var(--border-strong);
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--track-bg);
   transition: background 0.2s, border-color 0.2s;
 }
 
@@ -608,8 +736,8 @@ body::after {
 }
 
 .toggle input:checked + .toggle-track {
-  border-color: #22e08a88;
-  background: #22e08a22;
+  border-color: color-mix(in srgb, var(--good) 60%, transparent);
+  background: color-mix(in srgb, var(--good) 15%, transparent);
 }
 
 .toggle input:checked + .toggle-track::after {
@@ -642,9 +770,26 @@ body::after {
 }
 
 .gauge-scale {
-  fill: #6a6f8a;
+  fill: var(--text-faint);
   font-family: var(--font-mono);
   font-size: 11px;
+}
+
+.gauge-track {
+  stroke: var(--track-bg);
+}
+
+.gauge-ticks {
+  stroke: color-mix(in srgb, var(--text-muted) 65%, transparent);
+}
+
+.gauge-needle line {
+  stroke: var(--needle);
+}
+
+.gauge-needle circle {
+  fill: var(--needle-hub);
+  stroke: var(--needle);
 }
 
 .gauge-needle {
@@ -837,7 +982,7 @@ body::after {
   height: 5px;
   margin-top: 10px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--track-bg);
   overflow: hidden;
 }
 
@@ -849,11 +994,43 @@ body::after {
   transition: width 0.6s ease, background 0.4s;
 }
 
+/* ----------------------------------------------------------------- Tone */
+/*
+ * The single place a tone becomes a colour. JavaScript only ever writes a tone
+ * name — `data-tone="critical"` — which is why a second palette costs nothing
+ * beyond the variables at the top of this file.
+ */
+[data-tone='good'] { --tone: var(--good); }
+[data-tone='warn'] { --tone: var(--warn); }
+[data-tone='bad'] { --tone: var(--bad); }
+[data-tone='critical'] { --tone: var(--critical); }
+[data-tone='bargain'] { --tone: var(--bargain); }
+
+.gauge-zone {
+  stroke: var(--tone);
+}
+
+.reading[data-tone] {
+  color: var(--tone);
+  text-shadow: 0 0 34px color-mix(in srgb, var(--tone) 40%, transparent);
+}
+
+.verdict[data-tone] {
+  border-color: color-mix(in srgb, var(--tone) 40%, transparent);
+  background: color-mix(in srgb, var(--tone) 8%, transparent);
+}
+
+.meter-bar span[data-tone] {
+  background: var(--tone);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--tone) 70%, transparent);
+}
+
 /* ------------------------------------------------------------ Utilities */
 .tone-good { color: var(--good); }
 .tone-warn { color: var(--warn); }
 .tone-bad { color: var(--bad); }
 .tone-critical { color: var(--critical); }
+.tone-bargain { color: var(--bargain); }
 
 .note {
   margin-top: 10px;
@@ -883,9 +1060,9 @@ body::after {
 }
 
 .colophon a {
-  color: #7b819c;
+  color: var(--text-faint);
   text-decoration: none;
-  border-bottom: 1px dotted #7b819c66;
+  border-bottom: 1px dotted currentcolor;
 }
 
 .colophon a:hover {
@@ -902,7 +1079,7 @@ body::after {
   padding: 12px 18px;
   border: 1px solid var(--border-strong);
   border-radius: 13px;
-  background: rgba(20, 20, 32, 0.92);
+  background: var(--toast-bg);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
   font-size: 0.84rem;
@@ -932,7 +1109,7 @@ body::after {
   }
 
   .result:hover {
-    background: rgba(0, 0, 0, 0.42);
+    background: var(--wash);
     transform: translateX(2px);
   }
 

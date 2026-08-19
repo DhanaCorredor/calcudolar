@@ -184,6 +184,12 @@ Both are ordinary disclosure elements, so they work without JavaScript, are keyb
 
 Collapsed content is still rendered and kept current; disclosure governs visibility, never correctness.
 
+**UI-10 · Theme.** Light and dark, with three states rather than two: light, dark, and *no stored choice*. Without a choice the page follows the operating system and keeps following it, so a phone that dims at sunset dims the app too; pressing the toggle turns a preference into a decision that outranks the system from then on.
+
+A stored choice is applied before the first paint, so no load shows a frame of the wrong palette.
+
+Colour is never named in JavaScript. The gauge bands and every verdict carry a *tone* — `good`, `warn`, `bad`, `critical`, `bargain` — and the stylesheet decides what a tone looks like in each palette. Accent colours are darkened for the light palette, where the neon values fail contrast against white.
+
 ---
 
 ## 6. Persistence
