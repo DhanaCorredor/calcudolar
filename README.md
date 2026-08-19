@@ -176,4 +176,9 @@ MIT. See [LICENSE](LICENSE).
 
 ---
 
+<p align="center">
+  Built by <a href="https://www.instagram.com/asisstyp">@asisstyp</a> ·
+  <a href="https://github.com/DhanaCorredor">GitHub</a>
+</p>
+
 <p align="center"><sub>A reference tool, not financial advice. Always check before you pay.</sub></p>
