@@ -1,5 +1,10 @@
 /* ==========================================================================
    Calcudolar — dark glassmorphism with alarm-meter accents.
+
+   Mobile-first: every base rule targets a phone held in one hand, and the two
+   `min-width` queries below only ever add. The app's whole use case is someone
+   standing at a till, so the narrow screen is the design, not the fallback.
+
    Organised as: tokens, reset, backdrop, layout, components, utilities.
    ========================================================================== */
 
@@ -29,6 +34,9 @@
   --radius-md: 15px;
   --radius-sm: 12px;
 
+  /* Smallest comfortable target for a thumb. */
+  --tap: 44px;
+
   --font-sans: 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'Space Grotesk', ui-monospace, 'Cascadia Mono', Consolas, monospace;
 }
@@ -50,7 +58,8 @@ html {
 body {
   position: relative;
   min-height: 100dvh;
-  padding: clamp(14px, 3vw, 36px) clamp(12px, 3vw, 24px) 60px;
+  /* Bottom padding clears the home indicator on a notched phone. */
+  padding: 20px 16px calc(40px + env(safe-area-inset-bottom));
   overflow-x: hidden;
   font-family: var(--font-sans);
   color: var(--text);
@@ -67,39 +76,31 @@ a {
 }
 
 /* ------------------------------------------------------------- Backdrop */
+/*
+ * Two blurred blobs. Kept modest on a phone — a 60vmax blur is a real cost on
+ * a mid-range device — and allowed to grow once there is a screen to fill.
+ */
 body::before,
 body::after {
   content: '';
   position: fixed;
   z-index: -2;
+  width: 70vmax;
+  height: 70vmax;
   border-radius: 50%;
-  filter: blur(90px);
-  opacity: 0.5;
+  filter: blur(60px);
+  opacity: 0.42;
   pointer-events: none;
 }
 
 body::before {
-  inset: -25vmax auto auto -15vmax;
-  width: 60vmax;
-  height: 60vmax;
+  inset: -35vmax auto auto -30vmax;
   background: radial-gradient(circle, #ff2e6355, transparent 65%);
-  animation: drift-warm 18s ease-in-out infinite alternate;
 }
 
 body::after {
-  inset: auto -15vmax -25vmax auto;
-  width: 55vmax;
-  height: 55vmax;
+  inset: auto -30vmax -35vmax auto;
   background: radial-gradient(circle, #00e5ff44, transparent 65%);
-  animation: drift-cool 22s ease-in-out infinite alternate;
-}
-
-@keyframes drift-warm {
-  to { transform: translate3d(8vw, 6vh, 0) scale(1.15); }
-}
-
-@keyframes drift-cool {
-  to { transform: translate3d(-8vw, -5vh, 0) scale(1.2); }
 }
 
 .backdrop-grid {
@@ -111,30 +112,16 @@ body::after {
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-  background-size: 46px 46px;
-  -webkit-mask-image: radial-gradient(ellipse at 50% 20%, #000 20%, transparent 75%);
-  mask-image: radial-gradient(ellipse at 50% 20%, #000 20%, transparent 75%);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  body::before,
-  body::after {
-    animation: none;
-  }
-
-  *,
-  *::before,
-  *::after {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-  }
+  background-size: 38px 38px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 15%, #000 20%, transparent 75%);
+  mask-image: radial-gradient(ellipse at 50% 15%, #000 20%, transparent 75%);
 }
 
 /* --------------------------------------------------------------- Layout */
 /*
- * One narrow column. The app asks for a single number and answers it, so
- * there is nothing to put beside anything else — and a measure this width
- * reads the same on a phone as on a desktop.
+ * One narrow column at every width. The app asks for a single number and
+ * answers it, so there is nothing to put beside anything else — and a measure
+ * this wide reads the same on a phone as on a desktop.
  */
 .layout {
   max-width: 620px;
@@ -142,22 +129,18 @@ body::after {
 }
 
 .layout > * + * {
-  margin-top: clamp(14px, 2.2vw, 20px);
+  margin-top: 14px;
 }
 
 /* ------------------------------------------------------------- Masthead */
 .masthead {
-  margin-bottom: clamp(20px, 4vw, 34px);
+  margin-bottom: 22px;
   text-align: center;
 }
 
-@keyframes heartbeat {
-  50% { opacity: 0.25; transform: scale(0.7); }
-}
-
 .masthead h1 {
-  margin: 0 0 8px;
-  font-size: clamp(2.3rem, 8vw, 4.2rem);
+  margin: 0 0 6px;
+  font-size: 2.4rem;
   font-weight: 800;
   line-height: 1;
   letter-spacing: -0.03em;
@@ -168,11 +151,12 @@ body::after {
 }
 
 .tagline {
-  max-width: 56ch;
+  max-width: 44ch;
   margin: 0 auto;
   color: var(--text-muted);
-  font-size: clamp(0.9rem, 2.4vw, 1.05rem);
+  font-size: 0.92rem;
   font-weight: 300;
+  line-height: 1.5;
 }
 
 .accent-merchant { color: var(--merchant); }
@@ -182,7 +166,7 @@ body::after {
 
 /* --------------------------------------------------------------- Panels */
 .panel {
-  padding: clamp(16px, 2.6vw, 24px);
+  padding: 16px;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface);
@@ -197,16 +181,16 @@ body::after {
   gap: 10px;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .panel-title {
   display: flex;
   align-items: center;
   gap: 9px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   color: var(--text-muted);
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -234,7 +218,8 @@ body::after {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 16px clamp(16px, 2.6vw, 24px);
+  min-height: var(--tap);
+  padding: 12px 16px;
   color: var(--text-muted);
   font-size: 0.88rem;
   font-weight: 600;
@@ -264,8 +249,8 @@ body::after {
 }
 
 .disclosure[open] .disclosure-summary {
-  color: var(--text);
   border-bottom: 1px solid var(--border);
+  color: var(--text);
 }
 
 .disclosure[open] .disclosure-icon {
@@ -273,24 +258,17 @@ body::after {
 }
 
 .disclosure-body {
-  padding: clamp(16px, 2.6vw, 24px);
-}
-
-.panel-note {
-  margin-left: auto;
-  font-weight: 400;
-  letter-spacing: 0;
-  text-transform: none;
+  padding: 16px;
 }
 
 /* --------------------------------------------------------- Status strip */
 .status {
   display: flex;
   flex-wrap: wrap;
-  gap: 11px;
+  gap: 10px;
   align-items: center;
-  margin-top: 16px;
-  padding: 11px 13px;
+  margin-top: 14px;
+  padding: 10px 12px;
   border: 1px solid var(--border-strong);
   border-radius: 14px;
   background: var(--well);
@@ -306,9 +284,9 @@ body::after {
 }
 
 .status-body {
-  flex: 1;
-  min-width: 150px;
-  font-size: 0.8rem;
+  flex: 1 1 60%;
+  min-width: 0;
+  font-size: 0.78rem;
   line-height: 1.45;
 }
 
@@ -316,7 +294,9 @@ body::after {
   display: block;
   color: var(--text-muted);
   font-family: var(--font-mono);
-  font-size: 0.74rem;
+  font-size: 0.7rem;
+  /* Long rate strings must wrap rather than push the layout sideways. */
+  overflow-wrap: anywhere;
 }
 
 .status.is-live { border-color: #22e08a55; background: #22e08a0e; }
@@ -337,27 +317,25 @@ body::after {
   animation: spin 0.8s linear infinite;
 }
 
+@keyframes heartbeat {
+  50% { opacity: 0.25; transform: scale(0.7); }
+}
+
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
 /* --------------------------------------------------------------- Fields */
 .field + .field,
-.field-pair + .field {
-  margin-top: 15px;
+.field-pair + .field,
+.field + .field-pair {
+  margin-top: 14px;
 }
 
+/* Stacked by default; side by side only once there is room for both labels. */
 .field-pair {
   display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: 12px;
-  margin-top: 15px;
-}
-
-@media (max-width: 430px) {
-  .field-pair {
-    grid-template-columns: 1fr;
-  }
 }
 
 .field-pair .field + .field {
@@ -366,7 +344,8 @@ body::after {
 
 .field-label {
   display: flex;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 7px;
@@ -376,12 +355,12 @@ body::after {
 
 .field-name {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
   color: var(--text);
   font-size: 0.86rem;
   font-weight: 600;
-  white-space: nowrap;
 }
 
 .chip {
@@ -422,14 +401,19 @@ body::after {
 
 .input {
   width: 100%;
-  padding: 14px 14px 14px 46px;
+  min-height: var(--tap);
+  padding: 13px 14px 13px 46px;
   border: 1px solid var(--border-strong);
   border-radius: 13px;
   outline: none;
   background: rgba(0, 0, 0, 0.35);
   color: var(--text);
   font-family: var(--font-mono);
-  font-size: 1.05rem;
+  /*
+   * Never below 16px: iOS Safari zooms the viewport on focus for anything
+   * smaller, and the page never zooms back out on blur.
+   */
+  font-size: 1rem;
   font-weight: 500;
   transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
 }
@@ -446,8 +430,8 @@ body::after {
 }
 
 .input-lead {
-  padding: 17px 14px 17px 54px;
-  font-size: 1.55rem;
+  padding: 16px 14px 16px 52px;
+  font-size: 1.7rem;
   letter-spacing: -0.02em;
 }
 
@@ -473,7 +457,8 @@ body::after {
 
 /* ------------------------------------------------------------- Controls */
 .mode-toggle {
-  padding: 4px 9px;
+  position: relative;
+  padding: 5px 10px;
   border: 1px solid var(--border-strong);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.05);
@@ -484,6 +469,13 @@ body::after {
   text-transform: uppercase;
   white-space: nowrap;
   transition: filter 0.18s, color 0.18s, border-color 0.18s;
+}
+
+/* Grows the hit area to thumb size without inflating the pill itself. */
+.mode-toggle::after {
+  content: '';
+  position: absolute;
+  inset: -11px -8px;
 }
 
 .mode-toggle.is-auto {
@@ -499,7 +491,9 @@ body::after {
 .button-ghost {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 7px;
+  min-height: var(--tap);
   padding: 10px 16px;
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
@@ -517,11 +511,11 @@ body::after {
 }
 
 .button-compact {
-  padding: 7px 12px;
-  font-size: 0.76rem;
+  padding: 8px 14px;
+  font-size: 0.78rem;
 }
 
-.button-compact:hover:not(:disabled) {
+.status .button-compact:hover:not(:disabled) {
   border-color: var(--border-strong);
   background: rgba(255, 255, 255, 0.1);
   color: var(--text);
@@ -543,12 +537,13 @@ body::after {
 }
 
 .segmented button {
-  padding: 8px 14px;
+  min-height: 38px;
+  padding: 8px 10px;
   border: 0;
   border-radius: 9px;
   background: none;
   color: var(--text-muted);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 600;
   white-space: nowrap;
   transition: color 0.18s, background 0.18s;
@@ -565,20 +560,18 @@ body::after {
 }
 
 .toggle-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 16px;
+  display: grid;
+  gap: 4px;
+  margin-top: 14px;
 }
 
 .toggle {
   display: flex;
-  gap: 9px;
+  gap: 10px;
   align-items: center;
+  min-height: var(--tap);
   color: var(--text-muted);
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   cursor: pointer;
   -webkit-user-select: none;
   user-select: none;
@@ -586,9 +579,9 @@ body::after {
 
 .toggle input {
   position: absolute;
-  opacity: 0;
   width: 0;
   height: 0;
+  opacity: 0;
 }
 
 .toggle-track {
@@ -632,12 +625,12 @@ body::after {
 
 /* ---------------------------------------------------------------- Gauge */
 .meter {
-  margin-top: 20px;
+  margin-top: 18px;
   text-align: center;
 }
 
 .gauge-frame {
-  max-width: 340px;
+  max-width: 320px;
   margin: 0 auto;
 }
 
@@ -660,10 +653,10 @@ body::after {
 }
 
 .reading {
-  margin-top: -46px;
+  margin-top: -42px;
   color: var(--text-muted);
   font-family: var(--font-mono);
-  font-size: clamp(2.6rem, 10vw, 3.6rem);
+  font-size: 2.8rem;
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.03em;
@@ -680,14 +673,14 @@ body::after {
 .reading-label {
   margin-top: 6px;
   color: var(--text-muted);
-  font-size: 0.72rem;
-  letter-spacing: 0.16em;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
 .verdict {
-  margin-top: 18px;
-  padding: 15px 16px;
+  margin-top: 16px;
+  padding: 14px 15px;
   border: 1px solid var(--border-strong);
   border-radius: 16px;
   background: var(--well);
@@ -695,21 +688,22 @@ body::after {
 }
 
 .verdict-emoji {
-  font-size: 1.9rem;
+  font-size: 1.8rem;
   line-height: 1;
 }
 
 .verdict-title {
   margin-top: 6px;
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 600;
 }
 
 .verdict-detail {
   margin-top: 5px;
   color: var(--text-muted);
-  font-size: 0.83rem;
+  font-size: 0.82rem;
   font-weight: 300;
+  line-height: 1.5;
 }
 
 .verdict.is-alarming {
@@ -727,29 +721,26 @@ body::after {
 /* -------------------------------------------------------------- Results */
 .results {
   display: grid;
-  gap: 11px;
+  gap: 10px;
 }
 
+/*
+ * Stacked on a phone: the amounts are the point, and squeezing them beside a
+ * label costs the digits their size. They move alongside at 420px.
+ */
 .result {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 12px;
-  align-items: center;
-  padding: 14px 15px;
+  gap: 10px;
+  padding: 13px 14px;
   border: 1px solid var(--border);
   border-left-width: 3px;
   border-radius: var(--radius-md);
   background: var(--well);
-  transition: background 0.25s, transform 0.25s;
-}
-
-.result:hover {
-  background: rgba(0, 0, 0, 0.42);
-  transform: translateX(2px);
+  transition: background 0.25s;
 }
 
 .result-name {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 600;
 }
 
@@ -757,28 +748,29 @@ body::after {
   margin-top: 4px;
   color: var(--text-muted);
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .result-amounts {
-  text-align: right;
-  white-space: nowrap;
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
 }
 
 .result-usd {
   font-family: var(--font-mono);
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 700;
   line-height: 1.1;
   letter-spacing: -0.02em;
 }
 
 .result-eur {
-  margin-top: 3px;
   color: var(--euro);
   font-family: var(--font-mono);
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 500;
 }
 
@@ -790,9 +782,9 @@ body::after {
 .result[data-rate='parallel'] .result-usd { color: var(--parallel); }
 
 .empty {
-  padding: 26px 10px;
+  padding: 22px 10px;
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 300;
   text-align: center;
 }
@@ -800,35 +792,28 @@ body::after {
 /* ----------------------------------------------------------- Comparison */
 .comparison {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 11px;
-  margin-top: 20px;
-}
-
-@media (max-width: 520px) {
-  .comparison {
-    grid-template-columns: 1fr;
-  }
+  gap: 10px;
+  margin-top: 18px;
 }
 
 .comparison-card {
-  padding: 14px 15px;
+  padding: 13px 14px;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   background: var(--well);
 }
 
 .comparison-head {
-  margin-bottom: 9px;
+  margin-bottom: 8px;
   color: var(--text-muted);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .comparison-usd {
   font-family: var(--font-mono);
-  font-size: 1.32rem;
+  font-size: 1.3rem;
   font-weight: 700;
   line-height: 1.15;
   letter-spacing: -0.02em;
@@ -838,19 +823,19 @@ body::after {
   margin-top: 3px;
   color: var(--euro);
   font-family: var(--font-mono);
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 500;
 }
 
 .comparison-percent {
   margin-top: 6px;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 600;
 }
 
 .meter-bar {
   height: 5px;
-  margin-top: 11px;
+  margin-top: 10px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.08);
   overflow: hidden;
@@ -871,7 +856,7 @@ body::after {
 .tone-critical { color: var(--critical); }
 
 .note {
-  margin-top: 11px;
+  margin-top: 10px;
   color: var(--text-muted);
   font-size: 0.76rem;
   font-weight: 300;
@@ -884,9 +869,9 @@ body::after {
 }
 
 .colophon {
-  margin-top: 30px;
+  margin-top: 26px;
   color: var(--text-faint);
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   font-weight: 300;
   line-height: 1.7;
   text-align: center;
@@ -911,16 +896,16 @@ body::after {
 .toast {
   position: fixed;
   left: 50%;
-  bottom: 26px;
+  bottom: calc(20px + env(safe-area-inset-bottom));
   z-index: 99;
-  max-width: 90vw;
-  padding: 12px 20px;
+  max-width: calc(100vw - 32px);
+  padding: 12px 18px;
   border: 1px solid var(--border-strong);
   border-radius: 13px;
   background: rgba(20, 20, 32, 0.92);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
-  font-size: 0.86rem;
+  font-size: 0.84rem;
   font-weight: 500;
   text-align: center;
   opacity: 0;
@@ -933,4 +918,133 @@ body::after {
 .toast.is-visible {
   opacity: 1;
   transform: translate(-50%, 0);
+}
+
+/* ==========================================================================
+   Enhancements. Everything above is the phone; these only add.
+   ========================================================================== */
+
+/* Wide enough for a label and its figures to share a line. */
+@media (min-width: 420px) {
+  .result {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .result:hover {
+    background: rgba(0, 0, 0, 0.42);
+    transform: translateX(2px);
+  }
+
+  .result-amounts {
+    display: block;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .result-eur {
+    margin-top: 3px;
+  }
+
+  .field-pair {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .comparison {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .toggle-row {
+    grid-template-columns: repeat(2, auto);
+    justify-content: space-between;
+  }
+}
+
+/* Comfortable on a laptop: more air, a bigger title, a showier backdrop. */
+@media (min-width: 680px) {
+  body {
+    padding: 36px 24px 60px;
+  }
+
+  body::before,
+  body::after {
+    width: 60vmax;
+    height: 60vmax;
+    filter: blur(90px);
+    opacity: 0.5;
+  }
+
+  body::before {
+    inset: -25vmax auto auto -15vmax;
+    animation: drift-warm 18s ease-in-out infinite alternate;
+  }
+
+  body::after {
+    inset: auto -15vmax -25vmax auto;
+    animation: drift-cool 22s ease-in-out infinite alternate;
+  }
+
+  .backdrop-grid {
+    background-size: 46px 46px;
+  }
+
+  .layout > * + * {
+    margin-top: 18px;
+  }
+
+  .masthead {
+    margin-bottom: 32px;
+  }
+
+  .masthead h1 {
+    font-size: 3.6rem;
+  }
+
+  .tagline {
+    font-size: 1.02rem;
+  }
+
+  .panel,
+  .disclosure-body {
+    padding: 22px;
+  }
+
+  .disclosure-summary {
+    padding: 16px 22px;
+  }
+
+  .input-lead {
+    font-size: 2rem;
+  }
+
+  .reading {
+    font-size: 3.4rem;
+  }
+
+  .gauge-frame {
+    max-width: 340px;
+  }
+}
+
+@keyframes drift-warm {
+  to { transform: translate3d(8vw, 6vh, 0) scale(1.15); }
+}
+
+@keyframes drift-cool {
+  to { transform: translate3d(-8vw, -5vh, 0) scale(1.2); }
+}
+
+/* --------------------------------------------------------- Preferences */
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  body::after {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }
