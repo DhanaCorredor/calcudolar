@@ -33,7 +33,7 @@ Calcudolar tells you before you pay. Type the amount and the rate you are being 
 
 The bolívar amount is fixed, so a *lower* rate makes nothing cheaper — it means you surrender *more* foreign currency. Overcharging shows up as a merchant rate **below** the reference:
 
-```
+```text
 foreign currency = amount ÷ rate
 overcharge %     = (reference rate ÷ merchant rate − 1) × 100
 ```
@@ -56,7 +56,7 @@ The interface is in Venezuelan Spanish, because that is who uses it. Everything 
 
 No framework, no bundler, no dependencies. Plain ES modules, split by responsibility so the domain logic can be tested in Node without a browser:
 
-```
+```text
 index.html          markup and element hooks
 styles.css          design tokens and components
 src/

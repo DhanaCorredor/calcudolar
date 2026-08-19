@@ -59,24 +59,30 @@ Deliberately out of scope for this version:
 The rule everything rests on, and the source of most confusion about it: **the bolívar amount is fixed**. A *lower* rate makes nothing cheaper — it means the customer surrenders *more* foreign currency. Overcharging therefore appears as a merchant rate **below** the reference.
 
 **CALC-1 · Conversion.**
-```
+
+```text
 foreign currency = amount ÷ rate
 ```
 
 **CALC-2 · Overcharge percentage.**
-```
+
+```text
 overcharge % = (reference rate ÷ merchant rate − 1) × 100
 ```
+
 Positive means the customer overpays; negative means they come out ahead. The formula depends only on the two rates, so **the gauge produces a reading before any amount is typed** — the amount is needed for the money figures alone.
 
 **CALC-3 · Absolute difference.**
-```
+
+```text
 difference = merchant currency − reference currency
 ```
+
 Reported in both dollars and euros.
 
 **CALC-4 · Euro conversion.** Where a Bs/€ rate is published for the same source, it is used directly. Where none exists — the merchant's rate, and any rate typed by hand — it is derived from the BCV cross rate:
-```
+
+```text
 EUR/USD cross = official EUR rate ÷ official USD rate
 derived Bs/€   = Bs/$ rate × cross
 euros          = amount ÷ Bs/€
@@ -95,6 +101,7 @@ euros          = amount ÷ Bs/€
 **RATE-2 · Why a mirror and not the BCV.** `bcv.org.ve` is not consumable from a browser: its TLS chain is incomplete and it sends no CORS headers, so a `fetch()` fails before reading a byte. Reading the BCV directly would require a backend of our own, which contradicts §1.2. **Revisit if an official CORS-enabled source appears.**
 
 **RATE-3 · When rates are fetched.**
+
 - on page load;
 - every 10 minutes, while automatic refresh is on;
 - on returning to the tab, if more than 10 minutes have passed since the last success;
