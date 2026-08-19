@@ -131,26 +131,18 @@ body::after {
 }
 
 /* --------------------------------------------------------------- Layout */
+/*
+ * One narrow column. The app asks for a single number and answers it, so
+ * there is nothing to put beside anything else — and a measure this width
+ * reads the same on a phone as on a desktop.
+ */
 .layout {
-  max-width: 1120px;
+  max-width: 620px;
   margin: 0 auto;
 }
 
-.columns {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-  gap: clamp(14px, 2.2vw, 22px);
-  align-items: start;
-}
-
-.column > * + * {
+.layout > * + * {
   margin-top: clamp(14px, 2.2vw, 20px);
-}
-
-@media (max-width: 900px) {
-  .columns {
-    grid-template-columns: 1fr;
-  }
 }
 
 /* ------------------------------------------------------------- Masthead */
@@ -159,37 +151,12 @@ body::after {
   text-align: center;
 }
 
-.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 14px;
-  border: 1px solid var(--border-strong);
-  border-radius: 999px;
-  background: var(--surface);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  color: var(--text-muted);
-  font-size: 0.72rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.pill-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--critical);
-  box-shadow: 0 0 10px var(--critical);
-  animation: heartbeat 1.4s infinite;
-}
-
 @keyframes heartbeat {
   50% { opacity: 0.25; transform: scale(0.7); }
 }
 
 .masthead h1 {
-  margin: 14px 0 8px;
+  margin: 0 0 8px;
   font-size: clamp(2.3rem, 8vw, 4.2rem);
   font-weight: 800;
   line-height: 1;
@@ -249,8 +216,64 @@ body::after {
   margin-bottom: 0;
 }
 
-.panel-title-centered {
-  justify-content: center;
+/* ----------------------------------------------------------- Disclosure */
+/*
+ * Native <details>, so the groups work with JavaScript off, answer to the
+ * keyboard and turn up in the browser's find-in-page.
+ */
+.disclosure {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
+  overflow: hidden;
+}
+
+.disclosure-summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px clamp(16px, 2.6vw, 24px);
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+  transition: color 0.18s, background 0.18s;
+}
+
+.disclosure-summary::-webkit-details-marker {
+  display: none;
+}
+
+.disclosure-summary:hover {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+}
+
+.disclosure-summary:focus-visible {
+  outline: 2px solid var(--merchant);
+  outline-offset: -2px;
+}
+
+.disclosure-icon {
+  color: var(--merchant);
+  font-size: 0.8rem;
+  transition: transform 0.2s ease;
+}
+
+.disclosure[open] .disclosure-summary {
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+
+.disclosure[open] .disclosure-icon {
+  transform: rotate(90deg);
+}
+
+.disclosure-body {
+  padding: clamp(16px, 2.6vw, 24px);
 }
 
 .panel-note {
@@ -266,7 +289,7 @@ body::after {
   flex-wrap: wrap;
   gap: 11px;
   align-items: center;
-  margin-bottom: 16px;
+  margin-top: 16px;
   padding: 11px 13px;
   border: 1px solid var(--border-strong);
   border-radius: 14px;
@@ -608,7 +631,8 @@ body::after {
 }
 
 /* ---------------------------------------------------------------- Gauge */
-.panel-meter {
+.meter {
+  margin-top: 20px;
   text-align: center;
 }
 
@@ -778,6 +802,7 @@ body::after {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 11px;
+  margin-top: 20px;
 }
 
 @media (max-width: 520px) {

@@ -80,6 +80,17 @@ function restorePreferences() {
   elements.merchantRate.value = saved.merchantRate ?? '';
   if (!state.autoRates.official) elements.officialRate.value = saved.officialRate ?? '';
   if (!state.autoRates.parallel) elements.parallelRate.value = saved.parallelRate ?? '';
+
+  revealGroupsHoldingState();
+}
+
+/**
+ * Restored input must never sit hidden behind a closed group: a value the user
+ * typed last time is exactly the thing they expect to find again (UI-9).
+ */
+function revealGroupsHoldingState() {
+  elements.merchantDisclosure.open = elements.merchantRate.value.trim() !== '';
+  elements.ratesDisclosure.open = !state.autoRates.official || !state.autoRates.parallel;
 }
 
 /* ------------------------------------------------------------ Live rates */
@@ -233,6 +244,7 @@ function clearEverything() {
   toggleRateMode('parallel', true);
   state.referenceMode = REFERENCE_MODES.official;
   setReferenceMode(state.referenceMode);
+  revealGroupsHoldingState();
 
   // The rate cache is public data from the feed, not the user's, so it stays.
   remove(STORAGE_KEYS.preferences);
