@@ -177,6 +177,9 @@ function applyVerdict(copy, verdict) {
 
 /* ---------------------------------------------------------------- Results */
 
+/** Rows shown last pass, so only genuinely new ones animate in. */
+let renderedRowKeys = [];
+
 /**
  * @param {Array<{key: string, dollarRate: number, euroRate: number|null,
  *                usd: number, eur: number|null}>} rows
@@ -184,8 +187,15 @@ function applyVerdict(copy, verdict) {
 export function renderResults(rows) {
   if (rows.length === 0) {
     elements.resultsList.innerHTML = `<p class="empty">${strings.emptyResults}</p>`;
+    renderedRowKeys = [];
     return;
   }
+
+  const keys = rows.map((row) => row.key);
+  // Every keystroke rebuilds this list. Animating all of it each time would be
+  // strobing, so the entrance is reserved for rows that were not there before.
+  const entering = new Set(keys.filter((key) => !renderedRowKeys.includes(key)));
+  renderedRowKeys = keys;
 
   elements.resultsList.innerHTML = rows
     .map((row) => {
@@ -194,7 +204,7 @@ export function renderResults(rows) {
         row.eur === null ? '' : `<p class="result-eur">€${formatMoney(row.eur)}</p>`;
 
       return `
-        <article class="result" data-rate="${row.key}">
+        <article class="result${entering.has(row.key) ? ' is-entering' : ''}" data-rate="${row.key}">
           <div>
             <p class="result-name">${strings.rateLabels[row.key]}</p>
             <p class="result-rate">${strings.rateCaptions[row.key]}<br>Bs. ${formatRate(row.dollarRate)} / $${euroRate}</p>
