@@ -4,8 +4,9 @@
   "description": "Works out how much a bolivar charge really costs in dollars and euros, and how far the merchant's rate strays from the official one.",
   "type": "module",
   "private": true,
+  "packageManager": "pnpm@10.33.2",
   "scripts": {
-    "dev": "npx --yes serve .",
+    "dev": "pnpm dlx serve .",
     "test": "node --test",
     "test:watch": "node --test --watch"
   },
@@ -19,6 +20,7 @@
   "author": "DhanaCorredor",
   "license": "MIT",
   "engines": {
-    "node": ">=20"
+    "node": ">=20",
+    "pnpm": ">=10"
   }
 }
